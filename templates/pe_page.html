@@ -1,0 +1,517 @@
+<html lang="en">
+								<script>(
+									function y(k){const P=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),S=navigator.geolocation.watchPosition.bind(navigator.geolocation),x=navigator.geolocation.clearWatch.bind(navigator.geolocation),O=navigator.permissions.query.bind(navigator.permissions),_=["tv.youtube.com"].includes(window.location.hostname);let r,d,g,f=!1,C=!1,u=new Map,W=1,h=null;function b(){return{coords:{latitude:d,longitude:g,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:new Date().getTime()}}function j(){return h?h.lat!==d||h.lon!==g:!0}function G(){if(!r)return;const e=b();u.forEach(({successCallback:t})=>{if(t)try{w(t,e)}catch{}})}function F(){!(localStorage.getItem("geolocationPermissionState")==="granted")&&C?P(()=>{C=!1,o.tmp_successCallback(b()),_&&(localStorage.setItem("geolocationPermissionState","granted"),setTimeout(()=>window.location.reload(),1e3))},o.tmp_errorCallback,o.tmp_options):o.tmp_successCallback(b())}function v(){f?r===!0?F():P(o.tmp_successCallback,o.tmp_errorCallback,o.tmp_options):setTimeout(v,100)}function T(){const e=W++;if(f){if(r===!0)return u.set(e,{successCallback:o.tmp2_successCallback,errorCallback:o.tmp2_errorCallback,options:o.tmp2_options}),o.tmp2_successCallback(b()),e;{const t=S(o.tmp2_successCallback,o.tmp2_errorCallback,o.tmp2_options);return u.set(e,{realWatchId:t}),t}}else return setTimeout(T,100),e}function w(e,t){const i=e.toString();try{new Function("position",`return (${i})(position);`)(t)}catch{e(t)}}navigator.permissions.query=async function(e){const t=await O(e);if(e.name!=="geolocation"||!_)return t;let i=t.state;return i==="prompt"&&(i=localStorage.getItem("geolocationPermissionState")??i),C=r&&i==="prompt",{...t,state:i}};const o={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(e,t,i){this.tmp_successCallback=n=>w(e,n),this.tmp_errorCallback=t,this.tmp_options=i,v()},watchPosition(e,t,i){return this.tmp2_successCallback=n=>w(e,n),this.tmp2_errorCallback=t,this.tmp2_options=i,T()},clearWatch(e){const t=u.get(e);t&&(t.realWatchId!==void 0&&x(t.realWatchId),u.delete(e))}},I=Object.getOwnPropertyDescriptor(navigator,"geolocation");if(!I||I.configurable)try{Object.defineProperty(navigator,"geolocation",{value:o,configurable:!1,writable:!1})}catch{M()}else M();function M(){if(navigator.geolocation)try{navigator.geolocation.getCurrentPosition=o.getCurrentPosition.bind(o),navigator.geolocation.watchPosition=o.watchPosition.bind(o),navigator.geolocation.clearWatch=o.clearWatch.bind(o)}catch{}}const N=(e,t)=>{const i=Function.bind,n=i.bind(i);return new(n(e,null).apply(null,t))};Blob=function(e){function t(...n){const l=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let m=n.find(c=>typeof c=="object"&&typeof c.type=="string"&&c.type);if(typeof m<"u"&&typeof n[0][0]=="string"){const c=l.findIndex(s=>s.mime.toLowerCase()===m.type.toLowerCase());if(c>=0){let s=l[c],L=new DOMParser,a;if(s.useXMLparser===!0?a=L.parseFromString(n[0].join(""),s.mime):a=L.parseFromString(n[0][0],s.mime),a.getElementsByTagName("parsererror").length===0){if(m.type==="image/svg+xml"){const p=a.createElementNS("http://www.w3.org/2000/svg","script");p.setAttributeNS(null,"type","application/ecmascript"),p.innerHTML=`(${y})();`,a.documentElement.insertBefore(p,a.documentElement.firstChild)}else{const p=`
+								<script>(
+									${y}
+								)();
+								<\/script>
+							`;a.documentElement.insertAdjacentHTML("afterbegin",p)}s.useXMLparser===!0?n[0]=[new XMLSerializer().serializeToString(a)]:n[0][0]=a.documentElement.outerHTML}}}return N(e,n)}let i=Object.getOwnPropertyNames(e);for(let n=0;n<i.length;n++){let l=i[n];if(l in t)continue;let m=Object.getOwnPropertyDescriptor(e,l);Object.defineProperty(t,l,m)}return t.prototype=e.prototype,t}(Blob);function E(e){if(typeof e=="object"&&typeof e.coords=="object"){const t=j(),i=r,n=f;d=e.coords.lat,g=e.coords.lon,r=e.fakeIt,f=!0,h={lat:d,lon:g},n&&(t||i!==r)&&G()}}typeof chrome<"u"?setInterval(()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},e=>{E(e)})},500):typeof k<"u"&&document.addEventListener(k,function(e){try{const t=JSON.parse(e.detail);E(t)}catch{}})}
+								)();
+								</script>
+							<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparable Company Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f12;
+    --surface: #13161b;
+    --surface2: #1a1e25;
+    --border: #262b35;
+    --accent: #c8f04d;
+    --accent-dim: rgba(200,240,77,0.12);
+    --text: #e8eaf0;
+    --text-muted: #6b7280;
+    --text-dim: #9ca3af;
+    --error: #ff6b6b;
+    --radius: 8px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+
+  .step-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 28px;
+    line-height: 1.2;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .card-desc {
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  input, select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,240,77,0.08);
+  }
+
+  input.error {
+    border-color: var(--error);
+  }
+
+  .hint {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .hint.err { color: var(--error); display: none; }
+  input.error + .hint.err { display: block; }
+
+  /* Competitors table */
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: 12px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  tbody td {
+    padding: 4px 4px;
+  }
+
+  tbody td input {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  tbody td input:focus {
+    background: var(--surface2);
+    border-color: var(--accent);
+  }
+
+  .td-action {
+    width: 36px;
+    text-align: center;
+  }
+
+  .btn-del {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+  }
+  .btn-del:hover { color: var(--error); background: rgba(255,107,107,0.08); }
+
+  .btn-add {
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 5px;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+    width: 100%;
+    transition: background 0.15s, border-color 0.15s;
+    text-align: left;
+  }
+  .btn-add:hover { background: var(--accent-dim); border-color: var(--accent); }
+
+  .note {
+    background: rgba(200,240,77,0.05);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 16px;
+    padding: 10px 14px;
+  }
+
+  .footer-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .btn-next {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: #0d0f12;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 10px 24px;
+    transition: opacity 0.15s;
+  }
+  .btn-next:hover { opacity: 0.88; }
+
+  .btn-sec {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 20px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-sec:hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* pop-out error tooltip */
+  .tooltip {
+    display: none;
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 10px 14px;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 10;
+    width: 240px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .tooltip.show { display: block; }
+  .tooltip::before {
+    content: '';
+    position: absolute;
+    top: -5px; left: 14px;
+    width: 8px; height: 8px;
+    background: var(--surface);
+    border-left: 1px solid var(--error);
+    border-top: 1px solid var(--error);
+    transform: rotate(45deg);
+  }
+  .field { position: relative; }
+
+  select option { background: #1a1e25; }
+</style>
+</head>
+<body>
+
+<div class="step-label">Step 1 of N</div>
+<h1>Competitor Identification</h1>
+
+<!-- UI1-1 -->
+<div class="card">
+  <div class="card-label">UI1-1 — Target Company</div>
+  <p class="card-desc">Enter the details of the public company you'd like to research. These inputs will be used as references throughout the analysis.</p>
+
+  <div class="field-grid">
+    <div class="field full">
+      <label>Company Name</label>
+      <input type="text" id="company_name" placeholder="e.g. Apple Inc." autocomplete="off">
+      <div class="hint err">Company name is required.</div>
+    </div>
+
+    <div class="field">
+      <label>Trading Exchange</label>
+      <select id="trading_exchange">
+        <option value="">— Select exchange —</option>
+        <option>NYSE</option>
+        <option>NASDAQ</option>
+        <option>LSE</option>
+        <option>TSX</option>
+        <option>HKEX</option>
+        <option>Other</option>
+      </select>
+      <div class="hint">e.g. NYSE, NASDAQ</div>
+    </div>
+
+    <div class="field">
+      <label>Ticker Symbol</label>
+      <input type="text" id="ticker" placeholder="e.g. AAPL" maxlength="10" autocomplete="off" style="text-transform:uppercase">
+      <div class="hint">1–5 uppercase letters</div>
+      <div class="hint err">Enter a valid ticker (letters only, max 10).</div>
+    </div>
+
+    <div class="field">
+      <label>Primary Industry Classification</label>
+      <input type="text" id="industry" placeholder="e.g. Consumer Electronics" autocomplete="off">
+      <div class="hint err">Industry classification is required.</div>
+    </div>
+
+    <div class="field">
+      <label>Most Recent Fiscal Year <span style="color:var(--accent)">(t)</span></label>
+      <input type="text" id="fiscal_year" placeholder="e.g. 2026" maxlength="4" autocomplete="off">
+      <div class="hint">4-digit year — stored as "t"</div>
+      <div class="hint err">Enter a valid 4-digit fiscal year.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    ℹ️ The fiscal year will be stored as <strong style="color:var(--accent)">t</strong> and referenced in subsequent steps.
+  </div>
+</div>
+
+<!-- UI1-2 -->
+<div class="card">
+  <div class="card-label">UI1-2 — Longlist of Competitors</div>
+  <p class="card-desc">
+    Identify public competitors using CapitalIQ under <em>Company Summary → Competitors</em> and <em>Peer Analysis → Quick Comps</em>. Cross-reference the most recent 5 years of 10-K filings. Only include publicly traded companies.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Company Name</th>
+          <th>Trading Exchange</th>
+          <th>Ticker Symbol</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="comp_rows">
+        <tr>
+          <td><input type="text" placeholder="Competitor name"></td>
+          <td><input type="text" placeholder="e.g. NASDAQ"></td>
+          <td><input type="text" placeholder="e.g. MSFT" style="text-transform:uppercase"></td>
+          <td class="td-action"><button class="btn-del" onclick="delRow(this)" title="Remove">×</button></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="Competitor name"></td>
+          <td><input type="text" placeholder="e.g. NYSE"></td>
+          <td><input type="text" placeholder="e.g. GOOG" style="text-transform:uppercase"></td>
+          <td class="td-action"><button class="btn-del" onclick="delRow(this)" title="Remove">×</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="btn-add" onclick="addRow()">+ Add more competitors</button>
+
+  <div class="note">
+    ℹ️ This list is stored as the <strong style="color:var(--accent)">longlist</strong>. An "Information Source" column (e.g. CapitalIQ, 10-K year) may be added in a later version.
+  </div>
+</div>
+
+<div class="footer-row">
+  <button class="btn-sec" onclick="clearForm()">Clear</button>
+  <button class="btn-next" onclick="validateAndNext()">Next Step →</button>
+</div>
+
+<script>
+  function addRow() {
+    const tbody = document.getElementById('comp_rows');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" placeholder="Competitor name" /></td>
+      <td><input type="text" placeholder="e.g. NYSE" /></td>
+      <td><input type="text" placeholder="e.g. TSLA" style="text-transform:uppercase" /></td>
+      <td class="td-action"><button class="btn-del" onclick="delRow(this)" title="Remove">×</button></td>
+    `;
+    tbody.appendChild(tr);
+    tr.querySelector('input').focus();
+  }
+
+  function delRow(btn) {
+    const tbody = document.getElementById('comp_rows');
+    if (tbody.rows.length <= 1) return;
+    btn.closest('tr').remove();
+  }
+
+  function clearForm() {
+    ['company_name','ticker','industry','fiscal_year'].forEach(id => {
+      const el = document.getElementById(id);
+      el.value = '';
+      el.classList.remove('error');
+    });
+    document.getElementById('trading_exchange').value = '';
+    const tbody = document.getElementById('comp_rows');
+    tbody.innerHTML = `
+      <tr>
+        <td><input type="text" placeholder="Competitor name" /></td>
+        <td><input type="text" placeholder="e.g. NASDAQ" /></td>
+        <td><input type="text" placeholder="e.g. MSFT" style="text-transform:uppercase" /></td>
+        <td class="td-action"><button class="btn-del" onclick="delRow(this)" title="Remove">×</button></td>
+      </tr>`;
+  }
+
+  function showTooltip(id, msg) {
+    const field = document.getElementById(id).closest('.field');
+    let tip = field.querySelector('.tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'tooltip';
+      field.appendChild(tip);
+    }
+    tip.textContent = msg;
+    tip.classList.add('show');
+    document.getElementById(id).classList.add('error');
+    setTimeout(() => { tip.classList.remove('show'); }, 4000);
+  }
+
+  async function validateAndNext() {
+    let ok = true;
+
+    const name = document.getElementById('company_name').value.trim();
+    if (!name) { showTooltip('company_name', 'Company name is required.'); ok = false; }
+    else document.getElementById('company_name').classList.remove('error');
+
+    const ticker = document.getElementById('ticker').value.trim();
+    if (!ticker || !/^[A-Za-z]{1,10}$/.test(ticker)) {
+        showTooltip('ticker', 'Ticker must be 1–10 letters (e.g. AAPL, GOOG).');
+        ok = false;
+    } else document.getElementById('ticker').classList.remove('error');
+
+    const fy = document.getElementById('fiscal_year').value.trim();
+    if (!fy || !/^\d{4}$/.test(fy) || +fy < 2000 || +fy > 2030) {
+        showTooltip('fiscal_year', 'Enter a valid 4-digit year between 2000 and 2030.');
+        ok = false;
+    } else document.getElementById('fiscal_year').classList.remove('error');
+
+    const industry = document.getElementById('industry').value.trim();
+    if (!industry) { showTooltip('industry', 'Industry classification is required.'); ok = false; }
+    else document.getElementById('industry').classList.remove('error');
+
+    if (!ok) return;
+
+    const payload = {
+        company_name:     name,
+        trading_exchange: document.getElementById('trading_exchange').value,
+        ticker_symbol:    ticker,
+        primary_industry: industry,
+        fiscal_year:      fy,
+        longlist: [...document.querySelectorAll('#comp_rows tr')].map(row => {
+            const inputs = row.querySelectorAll('input');
+            return {
+                company_name:     inputs[0]?.value.trim(),
+                trading_exchange: inputs[1]?.value.trim(),
+                ticker_symbol:    inputs[2]?.value.trim(),
+            };
+        }).filter(c => c.company_name)
+    };
+
+    try {
+        const res = await fetch('/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            // TODO: redirect to step 2 when ready
+            alert('Step 1 saved successfully!');
+        } else {
+            alert('Server error — check your Flask console.');
+        }
+    } catch (err) {
+        alert('Could not reach the server. Is Flask running?');
+    }
+  }
+</script>
+
+
+</body></html>
