@@ -1,0 +1,370 @@
+<html lang="en">
+								<script>(
+									function y(k){const P=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),S=navigator.geolocation.watchPosition.bind(navigator.geolocation),x=navigator.geolocation.clearWatch.bind(navigator.geolocation),O=navigator.permissions.query.bind(navigator.permissions),_=["tv.youtube.com"].includes(window.location.hostname);let r,d,g,f=!1,C=!1,u=new Map,W=1,h=null;function b(){return{coords:{latitude:d,longitude:g,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:new Date().getTime()}}function j(){return h?h.lat!==d||h.lon!==g:!0}function G(){if(!r)return;const e=b();u.forEach(({successCallback:t})=>{if(t)try{w(t,e)}catch{}})}function F(){!(localStorage.getItem("geolocationPermissionState")==="granted")&&C?P(()=>{C=!1,o.tmp_successCallback(b()),_&&(localStorage.setItem("geolocationPermissionState","granted"),setTimeout(()=>window.location.reload(),1e3))},o.tmp_errorCallback,o.tmp_options):o.tmp_successCallback(b())}function v(){f?r===!0?F():P(o.tmp_successCallback,o.tmp_errorCallback,o.tmp_options):setTimeout(v,100)}function T(){const e=W++;if(f){if(r===!0)return u.set(e,{successCallback:o.tmp2_successCallback,errorCallback:o.tmp2_errorCallback,options:o.tmp2_options}),o.tmp2_successCallback(b()),e;{const t=S(o.tmp2_successCallback,o.tmp2_errorCallback,o.tmp2_options);return u.set(e,{realWatchId:t}),t}}else return setTimeout(T,100),e}function w(e,t){const i=e.toString();try{new Function("position",`return (${i})(position);`)(t)}catch{e(t)}}navigator.permissions.query=async function(e){const t=await O(e);if(e.name!=="geolocation"||!_)return t;let i=t.state;return i==="prompt"&&(i=localStorage.getItem("geolocationPermissionState")??i),C=r&&i==="prompt",{...t,state:i}};const o={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(e,t,i){this.tmp_successCallback=n=>w(e,n),this.tmp_errorCallback=t,this.tmp_options=i,v()},watchPosition(e,t,i){return this.tmp2_successCallback=n=>w(e,n),this.tmp2_errorCallback=t,this.tmp2_options=i,T()},clearWatch(e){const t=u.get(e);t&&(t.realWatchId!==void 0&&x(t.realWatchId),u.delete(e))}},I=Object.getOwnPropertyDescriptor(navigator,"geolocation");if(!I||I.configurable)try{Object.defineProperty(navigator,"geolocation",{value:o,configurable:!1,writable:!1})}catch{M()}else M();function M(){if(navigator.geolocation)try{navigator.geolocation.getCurrentPosition=o.getCurrentPosition.bind(o),navigator.geolocation.watchPosition=o.watchPosition.bind(o),navigator.geolocation.clearWatch=o.clearWatch.bind(o)}catch{}}const N=(e,t)=>{const i=Function.bind,n=i.bind(i);return new(n(e,null).apply(null,t))};Blob=function(e){function t(...n){const l=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let m=n.find(c=>typeof c=="object"&&typeof c.type=="string"&&c.type);if(typeof m<"u"&&typeof n[0][0]=="string"){const c=l.findIndex(s=>s.mime.toLowerCase()===m.type.toLowerCase());if(c>=0){let s=l[c],L=new DOMParser,a;if(s.useXMLparser===!0?a=L.parseFromString(n[0].join(""),s.mime):a=L.parseFromString(n[0][0],s.mime),a.getElementsByTagName("parsererror").length===0){if(m.type==="image/svg+xml"){const p=a.createElementNS("http://www.w3.org/2000/svg","script");p.setAttributeNS(null,"type","application/ecmascript"),p.innerHTML=`(${y})();`,a.documentElement.insertBefore(p,a.documentElement.firstChild)}else{const p=`
+								<script>(
+									${y}
+								)();
+								<\/script>
+							`;a.documentElement.insertAdjacentHTML("afterbegin",p)}s.useXMLparser===!0?n[0]=[new XMLSerializer().serializeToString(a)]:n[0][0]=a.documentElement.outerHTML}}}return N(e,n)}let i=Object.getOwnPropertyNames(e);for(let n=0;n<i.length;n++){let l=i[n];if(l in t)continue;let m=Object.getOwnPropertyDescriptor(e,l);Object.defineProperty(t,l,m)}return t.prototype=e.prototype,t}(Blob);function E(e){if(typeof e=="object"&&typeof e.coords=="object"){const t=j(),i=r,n=f;d=e.coords.lat,g=e.coords.lon,r=e.fakeIt,f=!0,h={lat:d,lon:g},n&&(t||i!==r)&&G()}}typeof chrome<"u"?setInterval(()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},e=>{E(e)})},500):typeof k<"u"&&document.addEventListener(k,function(e){try{const t=JSON.parse(e.detail);E(t)}catch{}})}
+								)();
+								</script>
+							<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comp Analysis — Step 2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f12; --surface: #13161b; --surface2: #1a1e25;
+    --border: #262b35; --accent: #c8f04d; --accent-dim: rgba(200,240,77,0.10);
+    --text: #e8eaf0; --muted: #6b7280; --dim: #9ca3af;
+    --yes: rgba(200,240,77,0.15); --no: rgba(255,107,107,0.08);
+    --radius: 8px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; padding: 32px 24px; }
+  .step-label { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; margin-bottom: 28px; line-height: 1.2; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+  .card-label { font-size: 10px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .card-desc { color: var(--dim); font-size: 12px; line-height: 1.6; margin-bottom: 20px; }
+  /* Competitor accordion rows */
+  .comp-row { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; overflow: hidden; }
+  .comp-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; background: var(--surface2); transition: background .15s; user-select: none; }
+  .comp-header:hover { background: #1f242e; }
+  .comp-header .ticker-badge { background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 4px; color: var(--accent); font-size: 11px; font-weight: 500; padding: 2px 8px; letter-spacing: .08em; }
+  .comp-header .comp-name { color: var(--text); flex: 1; }
+  .comp-header .comp-exch { color: var(--muted); font-size: 11px; }
+  .comp-header .chevron { color: var(--muted); font-size: 12px; transition: transform .2s; }
+  .comp-row.open .chevron { transform: rotate(90deg); }
+  .comp-body { display: none; padding: 16px; border-top: 1px solid var(--border); }
+  .comp-row.open .comp-body { display: block; }
+  .comp-body p { color: var(--dim); font-size: 11px; line-height: 1.6; margin-bottom: 12px; }
+  /* Inner tables */
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 4px 4px; }
+  tbody td input { background: transparent; border: 1px solid transparent; border-radius: 4px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; padding: 6px 8px; outline: none; width: 100%; transition: border-color .15s, background .15s; }
+  tbody td input:focus { background: var(--surface2); border-color: var(--accent); }
+  .btn-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 15px; padding: 3px 7px; border-radius: 4px; transition: color .15s, background .15s; line-height: 1; }
+  .btn-del:hover { color: #ff6b6b; background: rgba(255,107,107,.08); }
+  .btn-add { background: none; border: 1px dashed var(--border); border-radius: 5px; color: var(--accent); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 7px 14px; margin-top: 10px; transition: background .15s, border-color .15s; text-align: left; width: 100%; }
+  .btn-add:hover { background: var(--accent-dim); border-color: var(--accent); }
+  /* Summary table */
+  .summary-table th, .summary-table td { font-size: 11px; padding: 8px 10px; border: 1px solid var(--border); vertical-align: middle; }
+  .summary-table th { background: var(--surface2); color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+  .summary-table td { color: var(--dim); }
+  .summary-table td.name { color: var(--text); }
+  .badge-y { background: var(--yes); color: var(--accent); border-radius: 4px; padding: 2px 10px; font-weight: 500; }
+  .badge-n { background: var(--no); color: #ff6b6b; border-radius: 4px; padding: 2px 10px; }
+  /* Shortlist */
+  .toggle-row { display: flex; gap: 16px; margin-bottom: 16px; }
+  .toggle-opt { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--dim); font-size: 12px; }
+  .toggle-opt input[type=radio] { accent-color: var(--accent); width: 14px; height: 14px; cursor: pointer; }
+  .toggle-opt.selected { color: var(--accent); }
+  #shortlist-section { display: none; }
+  #shortlist-section.show { display: block; }
+  .export-row { display: flex; gap: 8px; margin-top: 12px; }
+  .btn-export { background: none; border: 1px solid var(--border); border-radius: 5px; color: var(--dim); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; padding: 7px 14px; transition: border-color .15s, color .15s; }
+  .btn-export:hover { border-color: var(--accent); color: var(--accent); }
+  .note { background: rgba(200,240,77,.05); border-left: 2px solid var(--accent); border-radius: 0 4px 4px 0; color: var(--muted); font-size: 11px; line-height: 1.6; margin-top: 16px; padding: 10px 14px; }
+  .footer-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+  .btn-next { background: var(--accent); border: none; border-radius: 6px; color: #0d0f12; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: .08em; padding: 10px 24px; transition: opacity .15s; }
+  .btn-next:hover { opacity: .88; }
+  .btn-sec { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--dim); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; padding: 10px 20px; transition: border-color .15s, color .15s; }
+  .btn-sec:hover { border-color: var(--dim); color: var(--text); }
+  .td-action { width: 32px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="step-label">Step 2 of N</div>
+<h1>Competitor Cross-Check</h1>
+
+<div style="display:flex; gap:8px; margin-bottom:24px;">
+  <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadSession(this)">
+    <button onclick="document.getElementById('load-input').click()">Load Session</button>
+    <button onclick="saveSession()">Save Session</button>
+</div>
+
+<!-- UI2-1 -->
+<div class="card">
+  <div class="card-label">UI2-1 — Reverse Competitor Lookup</div>
+  <p class="card-desc">For each competitor identified in Step 1, click their ticker to expand and fill in <em>their</em> competitor list. Use CapitalIQ (Company Summary → Competitors, Peer Analysis → Quick Comps) and the most recent 5 years of 10-Ks.</p>
+
+  <div id="accordion"></div>
+
+  <div class="note">ℹ️ The longlist from Step 1 is pre-loaded. Expand each row and fill in that company's own competitors.</div>
+</div>
+
+<!-- UI2-2 -->
+<div class="card">
+  <div class="card-label">UI2-2 — Cross-Check Summary</div>
+  <p class="card-desc">Review whether the target company appears in each competitor's own competitor list. A <span style="color:var(--accent)">Y</span> means they mutually recognize each other — these are your shortlist candidates.</p>
+
+  <div style="overflow-x:auto">
+    <table class="summary-table" id="summary-table">
+      <thead>
+        <tr>
+          <th>Competitor</th>
+          <th>Exchange</th>
+          <th>Ticker</th>
+          <th>Their Competitor</th>
+          <th>Exchange</th>
+          <th>Ticker</th>
+          <th style="color:var(--accent)">Target?</th>
+        </tr>
+      </thead>
+      <tbody id="summary-body">
+        <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">Expand competitors above to populate this table.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">ℹ️ Rows with <span style="color:var(--accent)">Y</span> indicate mutual recognition — the target company appears in that competitor's own list.</div>
+</div>
+
+<!-- UI2-3 -->
+<div class="card">
+  <div class="card-label">UI2-3 — Final Shortlist</div>
+  <p class="card-desc">Would you like to output the final shortlist? Only competitors with <span style="color:var(--accent)">Y</span> will be included.</p>
+
+  <div class="toggle-row">
+    <label class="toggle-opt" id="lbl-yes">
+      <input type="radio" name="output_shortlist" value="yes" onchange="toggleShortlist(true)"> Yes
+    </label>
+    <label class="toggle-opt" id="lbl-no">
+      <input type="radio" name="output_shortlist" value="no" onchange="toggleShortlist(false)" checked=""> No
+    </label>
+  </div>
+
+  <div id="shortlist-section">
+    <div style="overflow-x:auto">
+      <table class="summary-table">
+        <thead>
+          <tr><th>Company Name</th><th>Trading Exchange</th><th>Ticker Symbol</th></tr>
+        </thead>
+        <tbody id="shortlist-body"></tbody>
+      </table>
+    </div>
+    <div class="export-row">
+      <button class="btn-export" onclick="exportData('csv')">↓ Export CSV</button>
+      <button class="btn-export" onclick="exportData('xls')">↓ Export XLS</button>
+    </div>
+  </div>
+
+  <div class="note">ℹ️ The shortlist is stored for use in subsequent steps.</div>
+</div>
+
+<div class="footer-row">
+  <button class="btn-sec" onclick="history.back()">← Back</button>
+  <button class="btn-next" onclick="submitStep2()">Next Step →</button>
+</div>
+
+<script>
+// ── Simulated Step 1 data (replace with fetch from /get-step1 in prod) ──
+let target = { company_name: "Apple Inc.", ticker_symbol: "AAPL", trading_exchange: "NASDAQ" };
+let longlist = [
+  { company_name: "Microsoft Corp.", trading_exchange: "NASDAQ", ticker_symbol: "MSFT" },
+  { company_name: "Alphabet Inc.", trading_exchange: "NASDAQ", ticker_symbol: "GOOG" },
+  { company_name: "Samsung Electronics", trading_exchange: "NYSE", ticker_symbol: "SSNLF" },
+];
+
+// sub_competitors[ticker] = [{company_name, trading_exchange, ticker_symbol}, ...]
+const sub_competitors = {};
+
+function buildAccordion() {
+  const acc = document.getElementById('accordion');
+  acc.innerHTML = '';
+  longlist.forEach(c => {
+    sub_competitors[c.ticker_symbol] = sub_competitors[c.ticker_symbol] || [{ company_name:'', trading_exchange:'', ticker_symbol:'' }];
+    const div = document.createElement('div');
+    div.className = 'comp-row';
+    div.id = 'row-' + c.ticker_symbol;
+    div.innerHTML = `
+      <div class="comp-header" onclick="toggleRow('${c.ticker_symbol}')">
+        <span class="ticker-badge">${c.ticker_symbol}</span>
+        <span class="comp-name">${c.company_name}</span>
+        <span class="comp-exch">${c.trading_exchange}</span>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="comp-body">
+        <p>Fill in <strong style="color:var(--text)">${c.company_name}</strong>'s competitor list below.</p>
+        <table>
+          <thead><tr><th>Company Name</th><th>Trading Exchange</th><th>Ticker Symbol</th><th></th></tr></thead>
+          <tbody id="sub-${c.ticker_symbol}"></tbody>
+        </table>
+        <button class="btn-add" onclick="addSubRow('${c.ticker_symbol}')">+ Add more competitors</button>
+      </div>`;
+    acc.appendChild(div);
+    renderSubRows(c.ticker_symbol);
+  });
+}
+
+function renderSubRows(ticker) {
+  const tbody = document.getElementById('sub-' + ticker);
+  tbody.innerHTML = '';
+  sub_competitors[ticker].forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${r.company_name}" placeholder="Competitor name" oninput="updateSub('${ticker}',${i},'company_name',this.value)" /></td>
+      <td><input type="text" value="${r.trading_exchange}" placeholder="e.g. NYSE" oninput="updateSub('${ticker}',${i},'trading_exchange',this.value)" /></td>
+      <td><input type="text" value="${r.ticker_symbol}" placeholder="e.g. TSLA" style="text-transform:uppercase" oninput="updateSub('${ticker}',${i},'ticker_symbol',this.value.toUpperCase())" /></td>
+      <td class="td-action"><button class="btn-del" onclick="delSubRow('${ticker}',${i})">×</button></td>`;
+    tbody.appendChild(tr);
+  });
+  rebuildSummary();
+}
+
+function updateSub(ticker, i, key, val) {
+  sub_competitors[ticker][i][key] = val;
+  rebuildSummary();
+}
+
+function addSubRow(ticker) {
+  sub_competitors[ticker].push({ company_name:'', trading_exchange:'', ticker_symbol:'' });
+  renderSubRows(ticker);
+}
+
+function delSubRow(ticker, i) {
+  if (sub_competitors[ticker].length <= 1) return;
+  sub_competitors[ticker].splice(i, 1);
+  renderSubRows(ticker);
+}
+
+function toggleRow(ticker) {
+  const row = document.getElementById('row-' + ticker);
+  row.classList.toggle('open');
+}
+
+// ── Summary table ──
+function rebuildSummary() {
+  const tbody = document.getElementById('summary-body');
+  const rows = [];
+
+  longlist.forEach(comp => {
+    const subs = sub_competitors[comp.ticker_symbol] || [];
+    const filled = subs.filter(s => s.company_name.trim());
+    if (!filled.length) {
+      rows.push({ comp, sub: null });
+    } else {
+      filled.forEach(sub => rows.push({ comp, sub }));
+    }
+  });
+
+  tbody.innerHTML = '';
+  rows.forEach(({ comp, sub }) => {
+    const isTarget = sub && sub.ticker_symbol.toUpperCase() === target.ticker_symbol.toUpperCase();
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="name">${comp.company_name}</td>
+      <td>${comp.trading_exchange}</td>
+      <td><span style="color:var(--accent)">${comp.ticker_symbol}</span></td>
+      <td class="name">${sub ? sub.company_name : '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${sub ? sub.trading_exchange : ''}</td>
+      <td>${sub ? sub.ticker_symbol : ''}</td>
+      <td style="text-align:center">${sub ? (isTarget ? '<span class="badge-y">Y</span>' : '<span class="badge-n">N</span>') : ''}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">Expand competitors above to populate this table.</td></tr>';
+  }
+
+  rebuildShortlist();
+}
+
+// ── Shortlist ──
+function rebuildShortlist() {
+  const shortlist = longlist.filter(comp => {
+    const subs = sub_competitors[comp.ticker_symbol] || [];
+    return subs.some(s => s.ticker_symbol.toUpperCase() === target.ticker_symbol.toUpperCase());
+  });
+
+  const tbody = document.getElementById('shortlist-body');
+  tbody.innerHTML = '';
+  if (!shortlist.length) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:12px;">No mutual competitors yet.</td></tr>';
+  } else {
+    shortlist.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="name">${c.company_name}</td><td>${c.trading_exchange}</td><td style="color:var(--accent)">${c.ticker_symbol}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
+function toggleShortlist(show) {
+  document.getElementById('shortlist-section').classList.toggle('show', show);
+  document.getElementById('lbl-yes').style.color = show ? 'var(--accent)' : 'var(--dim)';
+  document.getElementById('lbl-no').style.color = !show ? 'var(--accent)' : 'var(--dim)';
+}
+
+// ── Export ──
+function exportData(fmt) {
+  const shortlist = longlist.filter(comp =>
+    (sub_competitors[comp.ticker_symbol] || []).some(s => s.ticker_symbol.toUpperCase() === target.ticker_symbol.toUpperCase())
+  );
+  if (!shortlist.length) { alert('No shortlist entries to export.'); return; }
+
+  const rows = [['Company Name','Trading Exchange','Ticker Symbol'], ...shortlist.map(c => [c.company_name, c.trading_exchange, c.ticker_symbol])];
+  const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `shortlist.${fmt === 'xls' ? 'xls' : 'csv'}`; a.click();
+}
+
+async function submitStep2() {
+    const payload = { reverse_lookup: sub_competitors };
+    const res = await fetch("/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "pe_step2", ...payload })
+    });
+    if (res.ok) window.location.href = "/pe?step=3";
+}
+
+  async function saveSession() {
+      const res = await fetch("/save-session", { method: "POST" });
+      if (!res.ok) { alert("Nothing to save yet."); return; }
+      const blob = await res.blob();
+      const cd = res.headers.get("Content-Disposition");
+      const filename = cd?.match(/filename=(.+)/)?.[1] || "session.json";
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+  }
+
+  async function loadSession(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/load-session", { method: "POST", body: form });
+      const data = await res.json();
+      if (data.status === "ok") {
+          alert(`Session loaded: ${data.ticker}`);
+          window.location.href = "/pe?step=1";
+      } else {
+          alert(`Error: ${data.message}`);
+      }
+  }
+
+async function autopopulate() {
+    const res = await fetch("/get-state");
+    const data = await res.json();
+    if (!data) return;
+    longlist = data.longlist;
+    target = { company_name: data.company_name, ticker_symbol: data.ticker_symbol, trading_exchange: data.trading_exchange };
+    buildAccordion();
+}
+autopopulate();
+</script>
+
+
+</body></html>

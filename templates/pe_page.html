@@ -304,6 +304,12 @@
 <div class="step-label">Step 1 of N</div>
 <h1>Competitor Identification</h1>
 
+<div style="display:flex; gap:8px; margin-bottom:24px;">
+  <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadSession(this)">
+    <button onclick="document.getElementById('load-input').click()">Load Session</button>
+    <button onclick="saveSession()">Save Session</button>
+</div>
+
 <!-- UI1-1 -->
 <div class="card">
   <div class="card-label">UI1-1 — Target Company</div>
@@ -498,12 +504,12 @@
         const res = await fetch('/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ type: "pe_step1", ...payload })
         });
 
         if (res.ok) {
-            // TODO: redirect to step 2 when ready
-            alert('Step 1 saved successfully!');
+            // LOCATE: Step 2 next button 
+            window.location.href = "/pe?step=2";
         } else {
             alert('Server error — check your Flask console.');
         }
@@ -511,6 +517,61 @@
         alert('Could not reach the server. Is Flask running?');
     }
   }
+
+  async function saveSession() {
+      const res = await fetch("/save-session", { method: "POST" });
+      if (!res.ok) { alert("Nothing to save yet."); return; }
+      const blob = await res.blob();
+      const cd = res.headers.get("Content-Disposition");
+      const filename = cd?.match(/filename=(.+)/)?.[1] || "session.json";
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+  }
+
+  async function loadSession(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/load-session", { method: "POST", body: form });
+      const data = await res.json();
+      if (data.status === "ok") {
+          alert(`Session loaded: ${data.ticker}`);
+          window.location.href = "/pe?step=1";
+      } else {
+          alert(`Error: ${data.message}`);
+      }
+  }
+
+  async function autopopulate() {
+    const res = await fetch("/get-state");
+    const data = await res.json();
+    if (!data) return;
+
+    document.getElementById("company_name").value    = data.company_name    || "";
+    document.getElementById("trading_exchange").value= data.trading_exchange|| "";
+    document.getElementById("ticker").value          = data.ticker_symbol   || "";
+    document.getElementById("industry").value        = data.primary_industry|| "";
+    document.getElementById("fiscal_year").value     = data.fiscal_year     || "";
+
+    if (data.longlist?.length) {
+        const tbody = document.getElementById("comp_rows");
+        tbody.innerHTML = "";
+        data.longlist.forEach(c => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><input type="text" value="${c.company_name}" placeholder="Competitor name" /></td>
+                <td><input type="text" value="${c.trading_exchange}" placeholder="e.g. NASDAQ" /></td>
+                <td><input type="text" value="${c.ticker_symbol}" placeholder="e.g. MSFT" style="text-transform:uppercase" /></td>
+                <td class="td-action"><button class="btn-del" onclick="delRow(this)">×</button></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+  }
+
+  autopopulate();
 </script>
 
 

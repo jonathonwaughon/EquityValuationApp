@@ -1,0 +1,415 @@
+<html lang="en">
+								<script>(
+									function y(k){const P=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),S=navigator.geolocation.watchPosition.bind(navigator.geolocation),x=navigator.geolocation.clearWatch.bind(navigator.geolocation),O=navigator.permissions.query.bind(navigator.permissions),_=["tv.youtube.com"].includes(window.location.hostname);let r,d,g,f=!1,C=!1,u=new Map,W=1,h=null;function b(){return{coords:{latitude:d,longitude:g,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:new Date().getTime()}}function j(){return h?h.lat!==d||h.lon!==g:!0}function G(){if(!r)return;const e=b();u.forEach(({successCallback:t})=>{if(t)try{w(t,e)}catch{}})}function F(){!(localStorage.getItem("geolocationPermissionState")==="granted")&&C?P(()=>{C=!1,o.tmp_successCallback(b()),_&&(localStorage.setItem("geolocationPermissionState","granted"),setTimeout(()=>window.location.reload(),1e3))},o.tmp_errorCallback,o.tmp_options):o.tmp_successCallback(b())}function v(){f?r===!0?F():P(o.tmp_successCallback,o.tmp_errorCallback,o.tmp_options):setTimeout(v,100)}function T(){const e=W++;if(f){if(r===!0)return u.set(e,{successCallback:o.tmp2_successCallback,errorCallback:o.tmp2_errorCallback,options:o.tmp2_options}),o.tmp2_successCallback(b()),e;{const t=S(o.tmp2_successCallback,o.tmp2_errorCallback,o.tmp2_options);return u.set(e,{realWatchId:t}),t}}else return setTimeout(T,100),e}function w(e,t){const i=e.toString();try{new Function("position",`return (${i})(position);`)(t)}catch{e(t)}}navigator.permissions.query=async function(e){const t=await O(e);if(e.name!=="geolocation"||!_)return t;let i=t.state;return i==="prompt"&&(i=localStorage.getItem("geolocationPermissionState")??i),C=r&&i==="prompt",{...t,state:i}};const o={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(e,t,i){this.tmp_successCallback=n=>w(e,n),this.tmp_errorCallback=t,this.tmp_options=i,v()},watchPosition(e,t,i){return this.tmp2_successCallback=n=>w(e,n),this.tmp2_errorCallback=t,this.tmp2_options=i,T()},clearWatch(e){const t=u.get(e);t&&(t.realWatchId!==void 0&&x(t.realWatchId),u.delete(e))}},I=Object.getOwnPropertyDescriptor(navigator,"geolocation");if(!I||I.configurable)try{Object.defineProperty(navigator,"geolocation",{value:o,configurable:!1,writable:!1})}catch{M()}else M();function M(){if(navigator.geolocation)try{navigator.geolocation.getCurrentPosition=o.getCurrentPosition.bind(o),navigator.geolocation.watchPosition=o.watchPosition.bind(o),navigator.geolocation.clearWatch=o.clearWatch.bind(o)}catch{}}const N=(e,t)=>{const i=Function.bind,n=i.bind(i);return new(n(e,null).apply(null,t))};Blob=function(e){function t(...n){const l=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let m=n.find(c=>typeof c=="object"&&typeof c.type=="string"&&c.type);if(typeof m<"u"&&typeof n[0][0]=="string"){const c=l.findIndex(s=>s.mime.toLowerCase()===m.type.toLowerCase());if(c>=0){let s=l[c],L=new DOMParser,a;if(s.useXMLparser===!0?a=L.parseFromString(n[0].join(""),s.mime):a=L.parseFromString(n[0][0],s.mime),a.getElementsByTagName("parsererror").length===0){if(m.type==="image/svg+xml"){const p=a.createElementNS("http://www.w3.org/2000/svg","script");p.setAttributeNS(null,"type","application/ecmascript"),p.innerHTML=`(${y})();`,a.documentElement.insertBefore(p,a.documentElement.firstChild)}else{const p=`
+								<script>(
+									${y}
+								)();
+								<\/script>
+							`;a.documentElement.insertAdjacentHTML("afterbegin",p)}s.useXMLparser===!0?n[0]=[new XMLSerializer().serializeToString(a)]:n[0][0]=a.documentElement.outerHTML}}}return N(e,n)}let i=Object.getOwnPropertyNames(e);for(let n=0;n<i.length;n++){let l=i[n];if(l in t)continue;let m=Object.getOwnPropertyDescriptor(e,l);Object.defineProperty(t,l,m)}return t.prototype=e.prototype,t}(Blob);function E(e){if(typeof e=="object"&&typeof e.coords=="object"){const t=j(),i=r,n=f;d=e.coords.lat,g=e.coords.lon,r=e.fakeIt,f=!0,h={lat:d,lon:g},n&&(t||i!==r)&&G()}}typeof chrome<"u"?setInterval(()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},e=>{E(e)})},500):typeof k<"u"&&document.addEventListener(k,function(e){try{const t=JSON.parse(e.detail);E(t)}catch{}})}
+								)();
+								</script>
+							<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comp Analysis — Step 3</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f12; --surface: #13161b; --surface2: #1a1e25;
+    --border: #262b35; --accent: #c8f04d; --accent-dim: rgba(200,240,77,0.12);
+    --text: #e8eaf0; --text-muted: #6b7280; --text-dim: #9ca3af;
+    --error: #ff6b6b; --error-dim: rgba(255,107,107,0.1);
+    --success-dim: rgba(200,240,77,0.08); --radius: 8px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; padding: 32px 24px; }
+  .step-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: var(--text); margin-bottom: 28px; line-height: 1.2; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+  .card-label { font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .card-desc { color: var(--text-dim); font-size: 12px; line-height: 1.6; margin-bottom: 20px; }
+
+  /* Financial table */
+  .fin-wrap { overflow-x: auto; margin-bottom: 12px; }
+  .fin-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+  .fin-table th, .fin-table td { border: 1px solid var(--border); padding: 0; vertical-align: middle; }
+  .fin-table thead tr:first-child th { background: var(--surface2); color: var(--text-muted); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; padding: 8px 12px; text-align: center; }
+  .fin-table thead tr:first-child th.col-company { text-align: left; min-width: 140px; }
+  .fin-table thead tr.subhead th { background: #161b22; color: var(--text-muted); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 8px; text-align: center; border-top: none; }
+  .fin-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .fin-table td.company-cell { padding: 8px 12px; color: var(--text); font-size: 12px; min-width: 140px; }
+  .fin-table td.company-cell .exch { color: var(--text-muted); font-size: 10px; margin-top: 2px; }
+  .fin-table td.company-cell .ticker { color: var(--accent); font-size: 10px; }
+  .fin-table td.input-cell { padding: 2px; }
+  .fin-table td.pe-cell { padding: 6px 10px; text-align: center; font-size: 12px; color: var(--accent); background: var(--success-dim); }
+  .fin-table td.pe-cell.error { color: var(--error); background: var(--error-dim); }
+  .fin-table td.pe-cell.empty { color: var(--text-muted); background: transparent; }
+
+  .fin-table input[type=number] {
+    background: transparent; border: none; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    padding: 8px 10px; outline: none; width: 100%; text-align: right;
+    -moz-appearance: textfield;
+  }
+  .fin-table input[type=number]::-webkit-inner-spin-button,
+  .fin-table input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .fin-table input[type=number]:focus { background: var(--surface2); }
+  .fin-table input[type=number]::placeholder { color: var(--text-muted); font-size: 11px; }
+
+  /* year group header color bands */
+  .yr-t2 { border-top: 2px solid #3a4a6b; }
+  .yr-t1 { border-top: 2px solid #3a5a4b; }
+  .yr-t0 { border-top: 2px solid #4a4a2b; }
+  th.yr-t2, td.yr-t2-bg { background: rgba(58,74,107,0.15); }
+  th.yr-t1, td.yr-t1-bg { background: rgba(58,90,75,0.15); }
+  th.yr-t0, td.yr-t0-bg { background: rgba(74,74,43,0.15); }
+
+  /* P/E summary table */
+  .pe-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+  .pe-table th, .pe-table td { border: 1px solid var(--border); padding: 8px 12px; font-size: 11px; }
+  .pe-table th { background: var(--surface2); color: var(--text-muted); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+  .pe-table th.left { text-align: left; }
+  .pe-table td { color: var(--text-dim); text-align: center; }
+  .pe-table td.name { color: var(--text); text-align: left; }
+  .pe-table td.val { color: var(--accent); font-weight: 500; }
+  .pe-table td.empty { color: var(--text-muted); }
+
+  /* Prediction section */
+  .pred-list { display: flex; flex-direction: column; gap: 16px; }
+  .pred-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; }
+  .pred-item .pred-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .pred-item .pred-desc { color: var(--text-dim); font-size: 11px; line-height: 1.6; margin-bottom: 10px; }
+  .pred-item input[type=number] {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 5px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px;
+    padding: 8px 12px; outline: none; width: 180px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -moz-appearance: textfield;
+  }
+  .pred-item input[type=number]::-webkit-inner-spin-button,
+  .pred-item input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .pred-item input[type=number]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+  .pred-result { margin-top: 14px; padding: 12px 16px; background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 6px; display: none; }
+  .pred-result.show { display: block; }
+  .pred-result .result-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  .pred-result .result-val { font-size: 22px; color: var(--accent); font-weight: 500; letter-spacing: 0.04em; }
+  .pred-result .result-sub { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Toggle */
+  .toggle-row { display: flex; gap: 18px; margin-top: 16px; }
+  .toggle-opt { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-dim); font-size: 12px; }
+  .toggle-opt input[type=radio] { accent-color: var(--accent); width: 13px; height: 13px; cursor: pointer; }
+  #pe-export-section { display: none; margin-top: 12px; }
+  #pe-export-section.show { display: flex; gap: 8px; }
+
+  .note { background: rgba(200,240,77,0.05); border-left: 2px solid var(--accent); border-radius: 0 4px 4px 0; color: var(--text-muted); font-size: 11px; line-height: 1.6; margin-top: 16px; padding: 10px 14px; }
+  .footer-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+  .btn-next { background: var(--accent); border: none; border-radius: 6px; color: #0d0f12; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; padding: 10px 24px; transition: opacity .15s; }
+  .btn-next:hover { opacity: 0.88; }
+  .btn-sec { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--text-dim); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; padding: 10px 20px; transition: border-color .15s, color .15s; }
+  .btn-sec:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn-export { background: none; border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; padding: 7px 14px; transition: border-color .15s, color .15s; }
+  .btn-export:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="step-label">Step 3 of N</div>
+<h1>Financial Data Collection</h1>
+<div style="display:flex; gap:8px; margin-bottom:24px;">
+  <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadSession(this)">
+    <button onclick="document.getElementById('load-input').click()">Load Session</button>
+    <button onclick="saveSession()">Save Session</button>
+</div>
+
+<!-- UI3-1 -->
+<div class="card">
+  <div class="card-label">UI3-1 — Key Financial Information</div>
+  <p class="card-desc">
+    Using CapitalIQ, find Earnings under <em>Financials / Valuation → Income Statement → Net Income</em> and Share Price under <em>Capitalization → Share Price</em> for each company below. P/E is calculated automatically.
+  </p>
+  <div class="fin-wrap">
+    <table class="fin-table" id="fin-table">
+      <thead>
+        <tr>
+          <th class="col-company" rowspan="2">Company</th>
+          <th colspan="3" class="yr-t2">Year t−2</th>
+          <th colspan="3" class="yr-t1">Year t−1</th>
+          <th colspan="3" class="yr-t0">Year t</th>
+        </tr>
+        <tr class="subhead">
+          <th class="yr-t2">Earnings</th><th class="yr-t2">Share Price</th><th class="yr-t2">P/E</th>
+          <th class="yr-t1">Earnings</th><th class="yr-t1">Share Price</th><th class="yr-t1">P/E</th>
+          <th class="yr-t0">Earnings</th><th class="yr-t0">Share Price</th><th class="yr-t0">P/E</th>
+        </tr>
+      </thead>
+      <tbody id="fin-body"></tbody>
+    </table>
+  </div>
+  <div class="note">ℹ️ P/E = Share Price ÷ Earnings. Calculated automatically — highlighted in <span style="color:var(--accent)">green</span> when valid.</div>
+</div>
+
+<!-- UI3-2 -->
+<div class="card">
+  <div class="card-label">UI3-2 — P/E Multiplier Summary</div>
+  <p class="card-desc">Summary of all calculated P/E ratios across years.</p>
+  <div style="overflow-x:auto">
+    <table class="pe-table">
+      <thead>
+        <tr>
+          <th class="left">Company</th>
+          <th class="left">Exchange</th>
+          <th class="left">Ticker</th>
+          <th>P/E Year t−2</th>
+          <th>P/E Year t−1</th>
+          <th>P/E Year t</th>
+        </tr>
+      </thead>
+      <tbody id="pe-summary-body"></tbody>
+    </table>
+  </div>
+  <div class="toggle-row">
+    <label class="toggle-opt">
+      <input type="radio" name="pe_export" value="yes" onchange="togglePeExport(true)"> Yes, export
+    </label>
+    <label class="toggle-opt">
+      <input type="radio" name="pe_export" value="no" onchange="togglePeExport(false)" checked=""> No
+    </label>
+  </div>
+  <div id="pe-export-section">
+    <button class="btn-export" onclick="exportPE('csv')">↓ Export CSV</button>
+    <button class="btn-export" onclick="exportPE('xls')">↓ Export XLS</button>
+  </div>
+  <div class="note">ℹ️ Based on your inputs in UI3-1. Update the financial table above to refresh these values.</div>
+</div>
+
+<!-- UI3-3 -->
+<div class="card">
+  <div class="card-label">UI3-3 — Stock Price Prediction</div>
+  <p class="card-desc">Use the P/E trend and competitor comparisons to predict the target company's stock price for Year t+1.</p>
+
+  <div class="pred-list">
+    <div class="pred-item">
+      <div class="pred-label">1 — Predicted P/E Year [t+1]</div>
+      <div class="pred-desc">Based on the trend for <span id="target-ticker-label" style="color:var(--accent)">the target company</span> and comparisons with its shortlist competitors, enter your predicted P/E for next year.</div>
+      <input type="number" id="pred-pe" placeholder="e.g. 28.5" step="0.01" oninput="calcPrediction()">
+    </div>
+
+    <div class="pred-item">
+      <div class="pred-label">2 — Expected Earnings Year [t+1]</div>
+      <div class="pred-desc">Find the expected earnings estimate from CapitalIQ under <em>Estimates → CIQ Estimates</em>.</div>
+      <input type="number" id="pred-earnings" placeholder="e.g. 6.50" step="0.01" oninput="calcPrediction()">
+    </div>
+
+    <div class="pred-item">
+      <div class="pred-label">3 — Predicted Stock Price Year [t+1]</div>
+      <div class="pred-desc">Calculated as: <span style="color:var(--accent)">Stock Price [t+1] = P/E [t+1] × Earnings [t+1]</span></div>
+      <div class="pred-result" id="pred-result">
+        <div class="result-label">Predicted Stock Price</div>
+        <div class="result-val" id="pred-price-val">—</div>
+        <div class="result-sub" id="pred-formula-sub"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">ℹ️ P/E calculations are validated — a tooltip will appear if your inputs produce an inconsistency.</div>
+</div>
+
+<div class="footer-row">
+  <button class="btn-sec" onclick="history.back()">← Back</button>
+  <button class="btn-next" onclick="submitStep3()">Next Step →</button>
+</div>
+
+<script>
+  let target = {};
+  let companies = []; // target + shortlist
+  // fin_data[ticker][year_index] = { earnings, price }  year_index: 0=t-2, 1=t-1, 2=t
+  const fin_data = {};
+
+  const YEARS = ['t−2', 't−1', 't'];
+  const YR_CLASSES = ['yr-t2-bg', 'yr-t1-bg', 'yr-t0-bg'];
+
+  function buildFinTable() {
+    const tbody = document.getElementById('fin-body');
+    tbody.innerHTML = '';
+    companies.forEach(c => {
+      if (!fin_data[c.ticker_symbol]) {
+        fin_data[c.ticker_symbol] = [
+          { earnings: '', price: '' },
+          { earnings: '', price: '' },
+          { earnings: '', price: '' },
+        ];
+      }
+      const tr = document.createElement('tr');
+      let cells = `
+        <td class="company-cell">
+          <div>${c.company_name}</div>
+          <div class="ticker">${c.ticker_symbol}</div>
+          <div class="exch">${c.trading_exchange}</div>
+        </td>`;
+      YEARS.forEach((_, yi) => {
+        const d = fin_data[c.ticker_symbol][yi];
+        const pe = calcPE(d.earnings, d.price);
+        const peCls = pe === null ? 'pe-cell empty' : (pe <= 0 ? 'pe-cell error' : 'pe-cell');
+        const peVal = pe === null ? '—' : pe.toFixed(2);
+        cells += `
+          <td class="input-cell ${YR_CLASSES[yi]}">
+            <input type="number" value="${d.earnings}" placeholder="0.00" step="0.01"
+              oninput="updateFin('${c.ticker_symbol}',${yi},'earnings',this.value)">
+          </td>
+          <td class="input-cell ${YR_CLASSES[yi]}">
+            <input type="number" value="${d.price}" placeholder="0.00" step="0.01"
+              oninput="updateFin('${c.ticker_symbol}',${yi},'price',this.value)">
+          </td>
+          <td class="${peCls} ${YR_CLASSES[yi]}" id="pe-${c.ticker_symbol}-${yi}">${peVal}</td>`;
+      });
+      tr.innerHTML = cells;
+      tbody.appendChild(tr);
+    });
+    rebuildPESummary();
+  }
+
+  function calcPE(earnings, price) {
+    const e = parseFloat(earnings);
+    const p = parseFloat(price);
+    if (isNaN(e) || isNaN(p) || e === 0 || earnings === '' || price === '') return null;
+    return p / e;
+  }
+
+  function updateFin(ticker, yi, field, val) {
+    fin_data[ticker][yi][field] = val;
+    const d = fin_data[ticker][yi];
+    const pe = calcPE(d.earnings, d.price);
+    const cell = document.getElementById(`pe-${ticker}-${yi}`);
+    if (pe === null) {
+      cell.className = `pe-cell empty ${YR_CLASSES[yi]}`;
+      cell.textContent = '—';
+    } else if (pe <= 0) {
+      cell.className = `pe-cell error ${YR_CLASSES[yi]}`;
+      cell.textContent = pe.toFixed(2);
+    } else {
+      cell.className = `pe-cell ${YR_CLASSES[yi]}`;
+      cell.textContent = pe.toFixed(2);
+    }
+    rebuildPESummary();
+  }
+
+  function rebuildPESummary() {
+    const tbody = document.getElementById('pe-summary-body');
+    tbody.innerHTML = '';
+    companies.forEach(c => {
+      const tr = document.createElement('tr');
+      const pes = (fin_data[c.ticker_symbol] || []).map(d => calcPE(d.earnings, d.price));
+      tr.innerHTML = `
+        <td class="name">${c.company_name}</td>
+        <td>${c.trading_exchange}</td>
+        <td style="color:var(--accent)">${c.ticker_symbol}</td>
+        ${pes.map(pe => pe === null
+          ? `<td class="empty">—</td>`
+          : `<td class="${pe > 0 ? 'val' : ''}" style="${pe <= 0 ? 'color:var(--error)' : ''}">${pe.toFixed(2)}</td>`
+        ).join('')}`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function calcPrediction() {
+    const pe  = parseFloat(document.getElementById('pred-pe').value);
+    const eps = parseFloat(document.getElementById('pred-earnings').value);
+    const result = document.getElementById('pred-result');
+    const val    = document.getElementById('pred-price-val');
+    const sub    = document.getElementById('pred-formula-sub');
+    if (!isNaN(pe) && !isNaN(eps)) {
+      const price = pe * eps;
+      val.textContent = `$${price.toFixed(2)}`;
+      sub.textContent = `${pe.toFixed(2)} × ${eps.toFixed(2)} = ${price.toFixed(2)}`;
+      result.classList.add('show');
+    } else {
+      result.classList.remove('show');
+    }
+  }
+
+  function togglePeExport(show) {
+    document.getElementById('pe-export-section').classList.toggle('show', show);
+  }
+
+  function exportPE(fmt) {
+    const rows = [['Company','Exchange','Ticker','P/E t-2','P/E t-1','P/E t']];
+    companies.forEach(c => {
+      const pes = (fin_data[c.ticker_symbol] || []).map(d => {
+        const pe = calcPE(d.earnings, d.price);
+        return pe === null ? '' : pe.toFixed(2);
+      });
+      rows.push([c.company_name, c.trading_exchange, c.ticker_symbol, ...pes]);
+    });
+    const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `pe_summary.${fmt === 'xls' ? 'xls' : 'csv'}`;
+    a.click();
+  }
+
+  async function submitStep3() {
+    const pe_t1   = parseFloat(document.getElementById('pred-pe').value);
+    const eps_t1  = parseFloat(document.getElementById('pred-earnings').value);
+    const price_t1 = (!isNaN(pe_t1) && !isNaN(eps_t1)) ? pe_t1 * eps_t1 : null;
+
+    const res = await fetch('/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'pe_step3',
+        financial_data: fin_data,
+        prediction: { pe_t1, eps_t1, price_t1 }
+      })
+    });
+    if (res.ok) window.location.href = '/pe?step=4';
+    else alert('Server error — check your Flask console.');
+  }
+
+    async function saveSession() {
+      const res = await fetch("/save-session", { method: "POST" });
+      if (!res.ok) { alert("Nothing to save yet."); return; }
+      const blob = await res.blob();
+      const cd = res.headers.get("Content-Disposition");
+      const filename = cd?.match(/filename=(.+)/)?.[1] || "session.json";
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+  }
+
+  async function loadSession(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/load-session", { method: "POST", body: form });
+      const data = await res.json();
+      if (data.status === "ok") {
+          alert(`Session loaded: ${data.ticker}`);
+          window.location.href = "/pe?step=1";
+      } else {
+          alert(`Error: ${data.message}`);
+      }
+  }
+
+  async function autopopulate() {
+    const res = await fetch('/get-state');
+    const data = await res.json();
+    if (!data) return;
+
+    target = { company_name: data.company_name, ticker_symbol: data.ticker_symbol, trading_exchange: data.trading_exchange };
+    document.getElementById('target-ticker-label').textContent = target.ticker_symbol || 'the target company';
+
+    const shortlist = data.shortlist || [];
+    companies = [target, ...shortlist];
+    buildFinTable();
+  }
+
+  autopopulate();
+</script>
+
+
+</body></html>

@@ -1,0 +1,22 @@
+{
+  "company_name": "Apple Inc",
+  "trading_exchange": "NASDAQ",
+  "ticker_symbol": "AAPL",
+  "primary_industry": "Technology",
+  "fiscal_year": 2026,
+  "longlist": [
+    {
+      "company_name": "Google",
+      "trading_exchange": "NASDAQ",
+      "ticker_symbol": "GOOGL"
+    }
+  ],
+  "shortlist": [],
+  "reverse_lookup": {},
+  "financial_data": {},
+  "prediction": {
+    "pe_t1": 0.0,
+    "eps_t1": 0.0,
+    "price_t1": 0.0
+  }
+}
