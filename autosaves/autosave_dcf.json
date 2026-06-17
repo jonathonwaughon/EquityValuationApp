@@ -1,0 +1,35 @@
+{
+  "saved_at": "2026-06-11T14:48:40.439128+00:00",
+  "page": "autosave:/dcf",
+  "url": "http://127.0.0.1:5000/dcf",
+  "fields": {
+    "#company_name": {
+      "value": "Apple Inc",
+      "type": "text"
+    },
+    "#trading_exchange": {
+      "value": "NYSE",
+      "type": "select-one"
+    },
+    "#ticker": {
+      "value": "AAPL",
+      "type": "text"
+    },
+    "#industry": {
+      "value": "Tech",
+      "type": "text"
+    },
+    "#fiscal_year_end": {
+      "value": "September 26",
+      "type": "text"
+    },
+    "#most_recent_fiscal_year": {
+      "value": "2025",
+      "type": "text"
+    },
+    "#edgar_identity": {
+      "value": "jwaughon27@cornellcollege.edu",
+      "type": "text"
+    }
+  }
+}

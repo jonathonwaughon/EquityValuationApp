@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCF Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f12;
+    --surface: #13161b;
+    --surface2: #1a1e25;
+    --border: #262b35;
+    --accent: #c8f04d;
+    --accent-dim: rgba(200,240,77,0.12);
+    --text: #e8eaf0;
+    --text-muted: #6b7280;
+    --text-dim: #9ca3af;
+    --error: #ff6b6b;
+    --radius: 8px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    min-height: 100vh;
+    padding: 0 24px 32px;
+  }
+
+  .app-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -24px 32px;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .app-logo {
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .app-nav ul {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .app-nav a {
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.15s;
+  }
+
+  .app-nav a:hover,
+  .app-nav a.active {
+    color: var(--accent);
+  }
+
+  .step-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 28px;
+    line-height: 1.2;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .card-desc {
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  input,
+  select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+
+  input:focus,
+  select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,240,77,0.08);
+  }
+
+  input.error,
+  select.error {
+    border-color: var(--error);
+  }
+
+  .hint {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .hint.err {
+    color: var(--error);
+    display: none;
+  }
+
+  input.error + .hint.err,
+  select.error + .hint.err {
+    display: block;
+  }
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 10px 14px;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 10;
+    width: 250px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .tooltip.show { display: block; }
+
+  .tooltip::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--surface);
+    border-left: 1px solid var(--error);
+    border-top: 1px solid var(--error);
+    transform: rotate(45deg);
+  }
+
+  .note {
+    background: rgba(200,240,77,0.05);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 16px;
+    padding: 10px 14px;
+  }
+
+  .helper-link {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .helper-link:hover {
+    text-decoration: underline;
+  }
+
+  .upload-box {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .upload-box.hidden {
+    display: none;
+  }
+
+  .upload-box input[type=file] {
+    border-style: dashed;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .expected-years {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .year-pill {
+    background: var(--accent-dim);
+    border: 1px solid rgba(200,240,77,0.35);
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .file-item {
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 11px;
+    padding-bottom: 6px;
+  }
+
+  .file-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .source-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .source-status {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    display: none;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 12px;
+    padding: 12px 14px;
+  }
+
+  .source-status.show {
+    display: block;
+  }
+
+  .source-status.success {
+    border-color: rgba(200,240,77,0.45);
+    color: var(--accent);
+  }
+
+  .source-status.warning {
+    border-color: rgba(255,107,107,0.45);
+    color: var(--text-dim);
+  }
+
+  .filing-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .filing-item {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-dim);
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr auto;
+    padding: 10px 12px;
+  }
+
+  .filing-item strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .filing-item span {
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+
+  .file-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-mini {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 5px 9px;
+    text-transform: uppercase;
+  }
+
+  .btn-mini:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .modal {
+    align-items: center;
+    background: rgba(0,0,0,0.72);
+    display: none;
+    inset: 0;
+    justify-content: center;
+    padding: 24px;
+    position: fixed;
+    z-index: 50;
+  }
+
+  .modal.show {
+    display: flex;
+  }
+
+  .modal-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    height: min(82vh, 820px);
+    max-width: 1040px;
+    overflow: hidden;
+    width: min(94vw, 1040px);
+  }
+
+  .modal-head {
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 12px 16px;
+  }
+
+  .modal-title {
+    color: var(--text);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .modal-frame {
+    background: #fff;
+    border: 0;
+    flex: 1;
+    width: 100%;
+  }
+
+  .footer-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .btn-next {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: #0d0f12;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 10px 24px;
+    transition: opacity 0.15s;
+  }
+
+  .btn-next:hover { opacity: 0.88; }
+
+  .btn-sec {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 20px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .btn-sec:hover {
+    border-color: var(--text-dim);
+    color: var(--text);
+  }
+
+  .btn-sec:disabled,
+  .btn-next:disabled {
+    cursor: wait;
+    opacity: 0.55;
+  }
+
+  .save-status {
+    color: var(--text-muted);
+    font-size: 11px;
+    margin-right: auto;
+    align-self: center;
+  }
+
+  select option { background: #1a1e25; }
+
+  @media (max-width: 640px) {
+    .app-nav { padding: 18px 24px; }
+    .field-grid { grid-template-columns: 1fr; }
+    .footer-row { align-items: stretch; flex-direction: column; }
+    .save-status { margin-right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="app-nav">
+  <a class="app-logo" href="/">Financial Service</a>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/pe">PE</a></li>
+    <li><a class="active" href="/dcf">DCF</a></li>
+  </ul>
+</nav>
+
+<div class="step-label">DCF Step 1</div>
+<h1>Collecting Information</h1>
+
+<div class="card">
+  <div class="card-label">UI1-1 - Target Company</div>
+  <p class="card-desc">Please tell me which public company you would like to research. These details will be stored as the starting point for the DCF workflow.</p>
+
+  <div class="field-grid">
+    <div class="field full">
+      <label>Company Name</label>
+      <input type="text" id="company_name" placeholder="e.g. Apple Inc." autocomplete="off">
+      <div class="hint err">Company name is required.</div>
+    </div>
+
+    <div class="field">
+      <label>Trading Exchange</label>
+      <select id="trading_exchange">
+        <option value="">Select exchange</option>
+        <option>NYSE</option>
+        <option>NASDAQ</option>
+        <option>LSE</option>
+        <option>TSX</option>
+        <option>HKEX</option>
+        <option>Other</option>
+      </select>
+      <div class="hint err">Trading exchange is required.</div>
+    </div>
+
+    <div class="field">
+      <label>Ticker Symbol</label>
+      <input type="text" id="ticker" placeholder="e.g. AAPL" maxlength="10" autocomplete="off" style="text-transform:uppercase">
+      <div class="hint err">Enter a valid ticker using letters, periods, or hyphens.</div>
+    </div>
+
+    <div class="field">
+      <label>Primary Industry Classification</label>
+      <input type="text" id="industry" placeholder="e.g. Consumer Electronics" autocomplete="off">
+      <div class="hint err">Industry classification is required.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    These fields are stored for future DCF steps. Uploading 10-Ks and financial statements will be added after this framework.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label">UI1-2 - Upload 10-Ks from EDGAR</div>
+  <p class="card-desc">
+    Enter the target company's fiscal timing, then upload the most recent five years of 10-K filings downloaded from EDGAR.
+  </p>
+
+  <div class="field-grid">
+    <div class="field">
+      <label>Fiscal Year End</label>
+      <input type="text" id="fiscal_year_end" placeholder="e.g. September 30" autocomplete="off">
+      <div class="hint err">Fiscal year end is required.</div>
+    </div>
+
+    <div class="field">
+      <label>Most Recent Fiscal Year</label>
+      <input type="text" id="most_recent_fiscal_year" placeholder="e.g. 2025" maxlength="4" autocomplete="off" oninput="updateExpectedYears()">
+      <div class="hint err">Enter a valid fiscal year between 2000 and 2035.</div>
+    </div>
+
+    <div class="field full">
+      <label>SEC Request Identity</label>
+      <input type="text" id="edgar_identity" placeholder="e.g. Your Name your.email@example.com" autocomplete="off">
+      <div class="hint">Required for SEC auto-source requests. Stored locally in this Flask session.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    First try to auto-source the most recent 10-Ks from EDGAR. If retrieval is unavailable or incomplete, upload the filings manually from
+    <a class="helper-link" href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC search filings</a>.
+  </div>
+
+  <div class="source-actions">
+    <button class="btn-sec" id="autosource-btn" onclick="autoSource10Ks()">Auto-source from EDGAR</button>
+    <button class="btn-sec" onclick="showManual10KInput()">Input manually</button>
+  </div>
+  <div class="source-status" id="source-status"></div>
+  <div class="filing-list" id="filing-list"></div>
+
+  <div class="upload-box hidden" id="manual-upload-box">
+    <div>Expected fiscal years based on your input:</div>
+    <div class="expected-years" id="expected-years">
+      <span class="year-pill">Enter recent year</span>
+    </div>
+    <div style="margin-top:12px;">Manual fallback: upload the most recent five 10-K filings below.</div>
+    <input type="file" id="ten_k_files" multiple accept=".pdf,.htm,.html,.txt,.xml,.xbrl">
+    <div class="hint">Accepted for now: PDF, HTML, TXT, XML, and XBRL files.</div>
+    <div class="file-list" id="uploaded-files"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label">UI1-3 - Upload Financial Statements</div>
+  <p class="card-desc">
+    Upload the CapitalIQ financial statement Excel file for the target company. The file should include Balance Sheet, Income Statement, and Cash Flow sheets.
+  </p>
+
+  <div class="note">
+    First try to auto-source the three core financial statements from EDGAR XBRL. You can still input manually using a CapitalIQ Excel file.
+  </div>
+
+  <div class="source-actions">
+    <button class="btn-sec" id="autosource-financials-btn" onclick="autoSourceFinancials()">Auto-source from EDGAR</button>
+    <button class="btn-sec" onclick="showManualFinancialInput()">Input manually</button>
+  </div>
+  <div class="source-status" id="financial-source-status"></div>
+  <div class="filing-list" id="financial-summary-list"></div>
+
+  <div class="upload-box hidden" id="manual-financial-box">
+    <div>Manual input: upload the CapitalIQ financial statement Excel file.</div>
+    <input type="file" id="financial_statement_files" multiple accept=".xls,.xlsx,.csv">
+    <div class="hint">Accepted for now: XLS, XLSX, and CSV. Later steps can parse these into DCF inputs.</div>
+    <div class="file-list" id="financial-files"></div>
+  </div>
+</div>
+
+<div class="footer-row">
+  <div class="save-status" id="save-status"></div>
+  <button class="btn-sec" onclick="clearForm()">Clear</button>
+  <button class="btn-next" onclick="goToStep2()">Next Step</button>
+</div>
+
+<div class="modal" id="preview-modal" onclick="closePreview(event)">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div class="modal-title" id="preview-title">Preview</div>
+      <div class="file-actions">
+        <a class="btn-mini" id="preview-open-link" href="#" target="_blank" rel="noopener">Open</a>
+        <button class="btn-mini" onclick="closePreview()">Close</button>
+      </div>
+    </div>
+    <iframe class="modal-frame" id="preview-frame" title="Document preview"></iframe>
+  </div>
+</div>
+
+<script>
+  function showTooltip(id, msg) {
+    const field = document.getElementById(id).closest('.field');
+    let tip = field.querySelector('.tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'tooltip';
+      field.appendChild(tip);
+    }
+    tip.textContent = msg;
+    tip.classList.add('show');
+    document.getElementById(id).classList.add('error');
+    setTimeout(() => { tip.classList.remove('show'); }, 4000);
+  }
+
+  function clearError(id) {
+    document.getElementById(id).classList.remove('error');
+  }
+
+  function clearForm() {
+    ['company_name', 'ticker', 'industry'].forEach(id => {
+      const el = document.getElementById(id);
+      el.value = '';
+      clearError(id);
+    });
+    document.getElementById('trading_exchange').value = '';
+    clearError('trading_exchange');
+    document.getElementById('fiscal_year_end').value = '';
+    document.getElementById('most_recent_fiscal_year').value = '';
+    document.getElementById('edgar_identity').value = '';
+    document.getElementById('ten_k_files').value = '';
+    document.getElementById('financial_statement_files').value = '';
+    clearError('fiscal_year_end');
+    clearError('most_recent_fiscal_year');
+    renderUploadedFiles([]);
+    renderFilings([]);
+    renderFinancialFiles([]);
+    setSourceStatus('', '', false);
+    setFinancialSourceStatus('', '', false);
+    renderFinancialSummaries([]);
+    document.getElementById('manual-upload-box').classList.add('hidden');
+    document.getElementById('manual-financial-box').classList.add('hidden');
+    updateExpectedYears();
+    document.getElementById('save-status').textContent = '';
+  }
+
+  function validateStep1() {
+    let ok = true;
+    const name = document.getElementById('company_name').value.trim();
+    const exchange = document.getElementById('trading_exchange').value.trim();
+    const ticker = document.getElementById('ticker').value.trim().toUpperCase();
+    const industry = document.getElementById('industry').value.trim();
+
+    if (!name) {
+      showTooltip('company_name', 'Company name is required.');
+      ok = false;
+    } else {
+      clearError('company_name');
+    }
+
+    if (!exchange) {
+      showTooltip('trading_exchange', 'Choose the exchange where the company is primarily listed.');
+      ok = false;
+    } else {
+      clearError('trading_exchange');
+    }
+
+    if (!ticker || !/^[A-Z][A-Z.-]{0,9}$/.test(ticker)) {
+      showTooltip('ticker', 'Ticker must start with a letter and can include letters, periods, or hyphens.');
+      ok = false;
+    } else {
+      clearError('ticker');
+    }
+
+    if (!industry) {
+      showTooltip('industry', 'Primary industry classification is required.');
+      ok = false;
+    } else {
+      clearError('industry');
+    }
+
+    return ok;
+  }
+
+  function validateStep2() {
+    let ok = true;
+    const fiscalYearEnd = document.getElementById('fiscal_year_end').value.trim();
+    const recentYear = document.getElementById('most_recent_fiscal_year').value.trim();
+    const yearNum = Number(recentYear);
+    const files = [...document.getElementById('ten_k_files').files];
+    const allowed = ['pdf', 'htm', 'html', 'txt', 'xml', 'xbrl'];
+
+    if (!fiscalYearEnd) {
+      showTooltip('fiscal_year_end', 'Fiscal year end is required.');
+      ok = false;
+    } else {
+      clearError('fiscal_year_end');
+    }
+
+    if (!/^\d{4}$/.test(recentYear) || yearNum < 2000 || yearNum > 2035) {
+      showTooltip('most_recent_fiscal_year', 'Enter a valid 4-digit fiscal year between 2000 and 2035.');
+      ok = false;
+    } else {
+      clearError('most_recent_fiscal_year');
+    }
+
+    if (files.length && files.some(file => !allowed.includes(file.name.split('.').pop().toLowerCase()))) {
+      document.getElementById('save-status').textContent = 'One or more 10-K files has an unsupported file type.';
+      ok = false;
+    }
+
+    return ok;
+  }
+
+  function updateExpectedYears() {
+    const el = document.getElementById('expected-years');
+    const recentYear = Number(document.getElementById('most_recent_fiscal_year').value.trim());
+
+    if (!recentYear || recentYear < 2000 || recentYear > 2035) {
+      el.innerHTML = '<span class="year-pill">Enter recent year</span>';
+      return;
+    }
+
+    const years = Array.from({ length: 5 }, (_, i) => recentYear - 4 + i);
+    el.innerHTML = years.map(year => `<span class="year-pill">${year}</span>`).join('');
+  }
+
+  function renderUploadedFiles(files) {
+    const list = document.getElementById('uploaded-files');
+    if (!files || !files.length) {
+      list.innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = files.map(file => {
+      const url = JSON.stringify(file.preview_url || '');
+      const openUrl = JSON.stringify(file.open_url || file.preview_url || '');
+      const title = JSON.stringify(file.filename || file.name);
+      return `
+      <div class="file-item">
+        <span>${file.filename || file.name}</span>
+        <button class="btn-mini" onclick='openPreview(${url}, ${title}, ${openUrl})'>Preview</button>
+      </div>
+    `;
+    }).join('');
+  }
+
+  function renderFilings(filings) {
+    const list = document.getElementById('filing-list');
+    if (!filings || !filings.length) {
+      list.innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = filings.map((filing, index) => {
+      const url = JSON.stringify(filing.preview_url || '');
+      const openUrl = JSON.stringify(filing.open_url || filing.preview_url || '');
+      const title = JSON.stringify(`${filing.form || '10-K'} ${filing.period || ''}`.trim());
+      return `
+      <div class="filing-item">
+        <div>
+          <strong>${filing.form || '10-K'} ${filing.period ? `- ${filing.period}` : ''}</strong>
+          <span>${filing.accession_number || 'No accession number returned'}</span>
+        </div>
+        <div class="file-actions">
+          <span>${filing.filing_date || `Filing ${index + 1}`}</span>
+          <button class="btn-mini" onclick='openPreview(${url}, ${title}, ${openUrl})'>Preview</button>
+        </div>
+      </div>
+    `;
+    }).join('');
+  }
+
+  function renderFinancialFiles(files) {
+    const list = document.getElementById('financial-files');
+    if (!files || !files.length) {
+      list.innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = files.map(file => {
+      const url = JSON.stringify(file.preview_url || '');
+      const openUrl = JSON.stringify(file.open_url || file.preview_url || '');
+      const title = JSON.stringify(file.filename || file.name);
+      return `
+      <div class="file-item">
+        <span>${file.filename || file.name}</span>
+        <button class="btn-mini" onclick='openPreview(${url}, ${title}, ${openUrl})'>Preview</button>
+      </div>
+    `;
+    }).join('');
+  }
+
+  function renderFinancialSummaries(statements) {
+    const list = document.getElementById('financial-summary-list');
+    if (!statements || !statements.length) {
+      list.innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = statements.map(statement => {
+      const url = JSON.stringify(statement.preview_url || '');
+      const openUrl = JSON.stringify(statement.open_url || statement.preview_url || '');
+      const title = JSON.stringify(statement.title || statement.statement);
+      const periods = Array.isArray(statement.periods) ? statement.periods.slice(0, 4).join(', ') : '';
+      return `
+      <div class="filing-item">
+        <div>
+          <strong>${statement.title || statement.statement}</strong>
+          <span>${statement.rows || '0'} rows${periods ? ` - ${periods}` : ''}</span>
+        </div>
+        <div class="file-actions">
+          <span>${statement.filename || ''}</span>
+          <button class="btn-mini" onclick='openPreview(${url}, ${title}, ${openUrl})'>Preview</button>
+        </div>
+      </div>
+    `;
+    }).join('');
+  }
+
+  function openPreview(url, title, openUrl) {
+    if (!url) {
+      document.getElementById('save-status').textContent = 'No preview URL is available for this file.';
+      return;
+    }
+
+    document.getElementById('preview-title').textContent = title || 'Preview';
+    document.getElementById('preview-frame').src = url;
+    document.getElementById('preview-open-link').href = openUrl || url;
+    document.getElementById('preview-modal').classList.add('show');
+  }
+
+  function closePreview(event) {
+    if (event && event.target.id !== 'preview-modal') return;
+    document.getElementById('preview-modal').classList.remove('show');
+    document.getElementById('preview-frame').src = 'about:blank';
+  }
+
+  function setSourceStatus(message, status, showManual) {
+    const el = document.getElementById('source-status');
+    const uploadBox = document.getElementById('manual-upload-box');
+
+    el.textContent = message || '';
+    el.className = 'source-status';
+    if (message) {
+      el.classList.add('show');
+      if (status === 'auto') el.classList.add('success');
+      if (status === 'partial' || status === 'manual_required') el.classList.add('warning');
+    }
+
+    uploadBox.classList.toggle('hidden', !showManual);
+  }
+
+  function setFinancialSourceStatus(message, status, showManual) {
+    const el = document.getElementById('financial-source-status');
+    const uploadBox = document.getElementById('manual-financial-box');
+
+    el.textContent = message || '';
+    el.className = 'source-status';
+    if (message) {
+      el.classList.add('show');
+      if (status === 'auto') el.classList.add('success');
+      if (status === 'manual' || status === 'manual_required') el.classList.add('warning');
+    }
+
+    uploadBox.classList.toggle('hidden', !showManual);
+  }
+
+  function showManual10KInput() {
+    setSourceStatus('Manual 10-K input selected.', 'manual_required', true);
+  }
+
+  function showManualFinancialInput() {
+    setFinancialSourceStatus('Manual financial statement input selected.', 'manual_required', true);
+  }
+
+  async function autoSource10Ks() {
+    if (!validateStep1() || !validateStep2()) return;
+
+    const step1Saved = await saveStep1();
+    if (!step1Saved) return;
+
+    const payload = {
+      type: 'dcf_step2',
+      fiscal_year_end: document.getElementById('fiscal_year_end').value.trim(),
+      most_recent_fiscal_year: document.getElementById('most_recent_fiscal_year').value.trim(),
+      edgar_identity: document.getElementById('edgar_identity').value.trim(),
+    };
+
+    const btn = document.getElementById('autosource-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sourcing...';
+    document.getElementById('save-status').textContent = '';
+    setSourceStatus('Contacting EDGAR for the latest 10-K filings...', '', false);
+
+    try {
+      const saveRes = await fetch('/submit-dcf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!saveRes.ok) {
+        setSourceStatus('Could not save fiscal-year details before sourcing.', 'manual_required', true);
+        return;
+      }
+
+      const res = await fetch('/autosource-dcf-10ks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          edgar_identity: document.getElementById('edgar_identity').value.trim()
+        })
+      });
+      const data = await res.json();
+      const needsManual = data.status !== 'auto';
+
+      renderFilings(data.filings || []);
+      setSourceStatus(data.message || 'Auto-source finished.', data.status, needsManual);
+      document.getElementById('save-status').textContent = needsManual ? 'Manual upload may be needed.' : '10-Ks auto-sourced.';
+    } catch (err) {
+      renderFilings([]);
+      setSourceStatus('Could not reach EDGAR through the server. Please upload the 10-Ks manually.', 'manual_required', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Auto-source from EDGAR';
+    }
+  }
+
+  async function autoSourceFinancials() {
+    if (!validateStep1()) return;
+
+    const step1Saved = await saveStep1();
+    if (!step1Saved) return;
+
+    const btn = document.getElementById('autosource-financials-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sourcing...';
+    document.getElementById('save-status').textContent = '';
+    setFinancialSourceStatus('Contacting EDGAR for financial statements...', '', false);
+
+    try {
+      const res = await fetch('/autosource-dcf-financials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          edgar_identity: document.getElementById('edgar_identity').value.trim()
+        })
+      });
+      const data = await res.json();
+      const needsManual = data.status !== 'auto';
+
+      renderFinancialSummaries(data.statements || []);
+      setFinancialSourceStatus(data.message || 'Financial statement auto-source finished.', data.status, needsManual);
+      document.getElementById('save-status').textContent = needsManual ? 'Manual financial input may be needed.' : 'Financial statements auto-sourced.';
+    } catch (err) {
+      renderFinancialSummaries([]);
+      setFinancialSourceStatus('Could not reach EDGAR through the server. Upload financial statements manually.', 'manual_required', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Auto-source from EDGAR';
+    }
+  }
+
+  async function saveStep1() {
+    if (!validateStep1()) return false;
+
+    const payload = {
+      type: 'dcf_step1',
+      company_name: document.getElementById('company_name').value.trim(),
+      trading_exchange: document.getElementById('trading_exchange').value.trim(),
+      ticker_symbol: document.getElementById('ticker').value.trim().toUpperCase(),
+      primary_industry: document.getElementById('industry').value.trim(),
+    };
+
+    try {
+      const res = await fetch('/submit-dcf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        document.getElementById('save-status').textContent = 'Could not save UI1-1.';
+        return false;
+      }
+
+      document.getElementById('save-status').textContent = 'UI1-1 saved.';
+      return true;
+    } catch (err) {
+      document.getElementById('save-status').textContent = 'Could not reach the server.';
+      return false;
+    }
+  }
+
+  async function saveStep2() {
+    if (!validateStep1() || !validateStep2()) return;
+
+    const step1Saved = await saveStep1();
+    if (!step1Saved) return;
+
+    const payload = {
+      type: 'dcf_step2',
+      fiscal_year_end: document.getElementById('fiscal_year_end').value.trim(),
+      most_recent_fiscal_year: document.getElementById('most_recent_fiscal_year').value.trim(),
+      edgar_identity: document.getElementById('edgar_identity').value.trim(),
+    };
+
+    try {
+      const res = await fetch('/submit-dcf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        document.getElementById('save-status').textContent = 'Could not save UI1-2.';
+        return;
+      }
+
+      const files = [...document.getElementById('ten_k_files').files];
+      if (files.length) {
+        const form = new FormData();
+        files.forEach(file => form.append('ten_k_files', file));
+        const uploadRes = await fetch('/upload-dcf-10ks', {
+          method: 'POST',
+          body: form
+        });
+        const uploadData = await uploadRes.json();
+
+        if (!uploadRes.ok) {
+          document.getElementById('save-status').textContent = uploadData.message || 'Could not upload 10-K files.';
+          return;
+        }
+
+        renderUploadedFiles(uploadData.files);
+      }
+
+      document.getElementById('save-status').textContent = 'UI1-2 saved.';
+    } catch (err) {
+      document.getElementById('save-status').textContent = 'Could not reach the server.';
+    }
+  }
+
+  async function saveStep3() {
+    if (!validateStep1()) return;
+
+    const files = [...document.getElementById('financial_statement_files').files];
+    const allowed = ['xls', 'xlsx', 'csv'];
+
+    if (!files.length) {
+      document.getElementById('save-status').textContent = 'Choose a CapitalIQ financial statement file first.';
+      return;
+    }
+
+    if (files.some(file => !allowed.includes(file.name.split('.').pop().toLowerCase()))) {
+      document.getElementById('save-status').textContent = 'Financial statement files must be XLS, XLSX, or CSV.';
+      return;
+    }
+
+    const step1Saved = await saveStep1();
+    if (!step1Saved) return;
+
+    const form = new FormData();
+    files.forEach(file => form.append('financial_statement_files', file));
+
+    try {
+      const res = await fetch('/upload-dcf-financials', {
+        method: 'POST',
+        body: form
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        document.getElementById('save-status').textContent = data.message || 'Could not upload financial statements.';
+        return;
+      }
+
+      renderFinancialFiles(data.files);
+      document.getElementById('save-status').textContent = 'UI1-3 saved.';
+    } catch (err) {
+      document.getElementById('save-status').textContent = 'Could not reach the server.';
+    }
+  }
+
+  async function goToStep2() {
+    if (!validateStep1() || !validateStep2()) return;
+
+    const step1Saved = await saveStep1();
+    if (!step1Saved) return;
+
+    const step2Payload = {
+      type: 'dcf_step2',
+      fiscal_year_end: document.getElementById('fiscal_year_end').value.trim(),
+      most_recent_fiscal_year: document.getElementById('most_recent_fiscal_year').value.trim(),
+      edgar_identity: document.getElementById('edgar_identity').value.trim(),
+    };
+
+    try {
+      const step2Res = await fetch('/submit-dcf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(step2Payload)
+      });
+
+      if (!step2Res.ok) {
+        document.getElementById('save-status').textContent = 'Could not save Step 1 fiscal details.';
+        return;
+      }
+
+      const tenKFiles = [...document.getElementById('ten_k_files').files];
+      if (tenKFiles.length) {
+        const tenKForm = new FormData();
+        tenKFiles.forEach(file => tenKForm.append('ten_k_files', file));
+        const uploadRes = await fetch('/upload-dcf-10ks', {
+          method: 'POST',
+          body: tenKForm
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          document.getElementById('save-status').textContent = uploadData.message || 'Could not upload 10-K files.';
+          return;
+        }
+      }
+
+      const financialFiles = [...document.getElementById('financial_statement_files').files];
+      if (financialFiles.length) {
+        const allowed = ['xls', 'xlsx', 'csv'];
+        if (financialFiles.some(file => !allowed.includes(file.name.split('.').pop().toLowerCase()))) {
+          document.getElementById('save-status').textContent = 'Financial statement files must be XLS, XLSX, or CSV.';
+          return;
+        }
+
+        const financialForm = new FormData();
+        financialFiles.forEach(file => financialForm.append('financial_statement_files', file));
+        const financialRes = await fetch('/upload-dcf-financials', {
+          method: 'POST',
+          body: financialForm
+        });
+        const financialData = await financialRes.json();
+        if (!financialRes.ok) {
+          document.getElementById('save-status').textContent = financialData.message || 'Could not upload financial statements.';
+          return;
+        }
+      }
+
+      window.location.href = '/dcf?step=2';
+    } catch (err) {
+      document.getElementById('save-status').textContent = 'Could not reach the server.';
+    }
+  }
+
+  async function autopopulate() {
+    const res = await fetch('/get-dcf-state');
+    const data = await res.json();
+    if (!data) return;
+
+    document.getElementById('company_name').value = data.company_name || '';
+    document.getElementById('trading_exchange').value = data.trading_exchange || '';
+    document.getElementById('ticker').value = data.ticker_symbol || '';
+    document.getElementById('industry').value = data.primary_industry || '';
+    document.getElementById('fiscal_year_end').value = data.fiscal_year_end || '';
+    document.getElementById('most_recent_fiscal_year').value = data.most_recent_fiscal_year || '';
+    document.getElementById('edgar_identity').value = data.edgar_identity || '';
+    updateExpectedYears();
+    renderUploadedFiles(data.ten_k_files || []);
+    renderFilings(data.ten_k_filings || []);
+    renderFinancialFiles(data.financial_statement_files || []);
+    renderFinancialSummaries(data.financial_statement_summaries || []);
+    setSourceStatus(
+      data.ten_k_source_message || '',
+      data.ten_k_source_status || '',
+      data.ten_k_source_status === 'manual' || data.ten_k_source_status === 'partial' || data.ten_k_source_status === 'manual_required'
+    );
+    setFinancialSourceStatus(
+      data.financial_source_message || '',
+      data.financial_source_status || '',
+      data.financial_source_status === 'manual' || data.financial_source_status === 'manual_required'
+    );
+  }
+
+  autopopulate();
+</script>
+
+<script src="/static/autosave.js" defer></script>
+</body>
+</html>

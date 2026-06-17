@@ -22,7 +22,13 @@
     --error: #ff6b6b; --error-dim: rgba(255,107,107,0.1);
     --success-dim: rgba(200,240,77,0.08); --radius: 8px;
   }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; padding: 32px 24px; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; padding: 0 24px 32px; }
+  .app-nav { display: flex; align-items: center; justify-content: space-between; margin: 0 -24px 32px; padding: 20px 40px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .app-logo { color: var(--accent); font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .app-nav ul { display: flex; align-items: center; gap: 24px; list-style: none; }
+  .app-nav a { color: var(--text-muted); font-size: 11px; letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase; transition: color 0.15s; }
+  .app-nav a:hover, .app-nav a.active { color: var(--accent); }
+  @media (max-width: 640px) { .app-nav { padding: 18px 24px; } }
   .step-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
   h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: var(--text); margin-bottom: 28px; line-height: 1.2; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
@@ -115,7 +121,16 @@
 </head>
 <body>
 
-<div class="step-label">Step 3 of N</div>
+<nav class="app-nav">
+  <a class="app-logo" href="/">Financial Service</a>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a class="active" href="/pe">PE</a></li>
+    <li><a href="/dcf">DCF</a></li>
+  </ul>
+</nav>
+
+<div class="step-label">Step 3 of 3</div>
 <h1>Financial Data Collection</h1>
 <div style="display:flex; gap:8px; margin-bottom:24px;">
   <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadSession(this)">
@@ -224,11 +239,40 @@
 <script>
   let target = {};
   let companies = []; // target + shortlist
+  let fiscalYear = null;
   // fin_data[ticker][year_index] = { earnings, price }  year_index: 0=t-2, 1=t-1, 2=t
   const fin_data = {};
 
   const YEARS = ['t−2', 't−1', 't'];
   const YR_CLASSES = ['yr-t2-bg', 'yr-t1-bg', 'yr-t0-bg'];
+
+  function formatYearLabel(offset, fallback) {
+    if (!fiscalYear) return `Year ${fallback}`;
+    const marker = offset === 0 ? 'T' : `T${offset}`;
+    return `Year ${fiscalYear + offset} (${marker})`;
+  }
+
+  function updateYearLabels() {
+    const labels = [
+      formatYearLabel(-2, 'T-2'),
+      formatYearLabel(-1, 'T-1'),
+      formatYearLabel(0, 'T'),
+    ];
+    const finHeaders = [
+      document.querySelector('.fin-table th.yr-t2'),
+      document.querySelector('.fin-table th.yr-t1'),
+      document.querySelector('.fin-table th.yr-t0'),
+    ];
+    finHeaders.forEach((header, index) => {
+      if (header) header.textContent = labels[index];
+    });
+
+    const summaryHeaders = document.querySelectorAll('.pe-table thead th');
+    labels.forEach((label, index) => {
+      const header = summaryHeaders[index + 3];
+      if (header) header.textContent = `P/E ${label}`;
+    });
+  }
 
   function buildFinTable() {
     const tbody = document.getElementById('fin-body');
@@ -402,6 +446,8 @@
 
     target = { company_name: data.company_name, ticker_symbol: data.ticker_symbol, trading_exchange: data.trading_exchange };
     document.getElementById('target-ticker-label').textContent = target.ticker_symbol || 'the target company';
+    fiscalYear = Number(data.fiscal_year) || null;
+    updateYearLabels();
 
     const shortlist = data.shortlist || [];
     companies = [target, ...shortlist];
@@ -412,4 +458,5 @@
 </script>
 
 
+<script src="/static/autosave.js" defer></script>
 </body></html>

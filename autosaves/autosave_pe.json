@@ -1,0 +1,147 @@
+{
+  "saved_at": "2026-06-11T13:39:00.346185+00:00",
+  "page": "autosave:/pe",
+  "url": "http://127.0.0.1:5000/pe",
+  "fields": {
+    "#company_name": {
+      "value": "Apple Inc",
+      "type": "text"
+    },
+    "#trading_exchange": {
+      "value": "NYSE",
+      "type": "select-one"
+    },
+    "#ticker": {
+      "value": "AAPL",
+      "type": "text"
+    },
+    "#industry": {
+      "value": "Tech",
+      "type": "text"
+    },
+    "#fiscal_year": {
+      "value": "2025",
+      "type": "text"
+    },
+    "input:6": {
+      "value": "Alphabet Inc.",
+      "type": "text"
+    },
+    "input:7": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:8": {
+      "value": "GOOGL",
+      "type": "text"
+    },
+    "input:9": {
+      "value": "Dell Technologies Inc.",
+      "type": "text"
+    },
+    "input:10": {
+      "value": "NYSE",
+      "type": "text"
+    },
+    "input:11": {
+      "value": "DELL",
+      "type": "text"
+    },
+    "input:12": {
+      "value": "NVIDIA Corporation",
+      "type": "text"
+    },
+    "input:13": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:14": {
+      "value": "NVDA",
+      "type": "text"
+    },
+    "input:15": {
+      "value": "Amazon.com, Inc.",
+      "type": "text"
+    },
+    "input:16": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:17": {
+      "value": "AMZN",
+      "type": "text"
+    },
+    "input:18": {
+      "value": "Broadcom Inc.",
+      "type": "text"
+    },
+    "input:19": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:20": {
+      "value": "AVGO",
+      "type": "text"
+    },
+    "input:21": {
+      "value": "NetApp, Inc.",
+      "type": "text"
+    },
+    "input:22": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:23": {
+      "value": "NTAP",
+      "type": "text"
+    },
+    "input:24": {
+      "value": "Western Digital Corporation",
+      "type": "text"
+    },
+    "input:25": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:26": {
+      "value": "WDC",
+      "type": "text"
+    },
+    "input:27": {
+      "value": "Hewlett Packard Enterprise Company",
+      "type": "text"
+    },
+    "input:28": {
+      "value": "NYSE",
+      "type": "text"
+    },
+    "input:29": {
+      "value": "HPE",
+      "type": "text"
+    },
+    "input:30": {
+      "value": "HP Inc.",
+      "type": "text"
+    },
+    "input:31": {
+      "value": "NYSE",
+      "type": "text"
+    },
+    "input:32": {
+      "value": "HPQ",
+      "type": "text"
+    },
+    "input:33": {
+      "value": "Everpure, Inc.",
+      "type": "text"
+    },
+    "input:34": {
+      "value": "NYSE",
+      "type": "text"
+    },
+    "input:35": {
+      "value": "P",
+      "type": "text"
+    }
+  }
+}

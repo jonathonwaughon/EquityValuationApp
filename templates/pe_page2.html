@@ -22,7 +22,13 @@
     --yes: rgba(200,240,77,0.15); --no: rgba(255,107,107,0.08);
     --radius: 8px;
   }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; padding: 32px 24px; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; padding: 0 24px 32px; }
+  .app-nav { display: flex; align-items: center; justify-content: space-between; margin: 0 -24px 32px; padding: 20px 40px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .app-logo { color: var(--accent); font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .app-nav ul { display: flex; align-items: center; gap: 24px; list-style: none; }
+  .app-nav a { color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase; transition: color 0.15s; }
+  .app-nav a:hover, .app-nav a.active { color: var(--accent); }
+  @media (max-width: 640px) { .app-nav { padding: 18px 24px; } }
   .step-label { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
   h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; margin-bottom: 28px; line-height: 1.2; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
@@ -82,7 +88,16 @@
 </head>
 <body>
 
-<div class="step-label">Step 2 of N</div>
+<nav class="app-nav">
+  <a class="app-logo" href="/">Financial Service</a>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a class="active" href="/pe">PE</a></li>
+    <li><a href="/dcf">DCF</a></li>
+  </ul>
+</nav>
+
+<div class="step-label">Step 2 of 3</div>
 <h1>Competitor Cross-Check</h1>
 
 <div style="display:flex; gap:8px; margin-bottom:24px;">
@@ -199,6 +214,11 @@ function buildAccordion() {
           <tbody id="sub-${c.ticker_symbol}"></tbody>
         </table>
         <button class="btn-add" onclick="addSubRow('${c.ticker_symbol}')">+ Add more competitors</button>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <input type="file" id="quick-${c.ticker_symbol}" accept=".xls,.xlsx" style="display:none" onchange="uploadSubQuickComps('${c.ticker_symbol}', this)">
+          <button class="btn-sec" onclick="document.getElementById('quick-${c.ticker_symbol}').click()">Upload Quick Comps</button>
+          <span style="color:var(--muted);font-size:11px;" id="quick-status-${c.ticker_symbol}"></span>
+        </div>
       </div>`;
     acc.appendChild(div);
     renderSubRows(c.ticker_symbol);
@@ -218,6 +238,31 @@ function renderSubRows(ticker) {
     tbody.appendChild(tr);
   });
   rebuildSummary();
+}
+
+async function uploadSubQuickComps(ticker, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const status = document.getElementById('quick-status-' + ticker);
+  status.textContent = 'Importing Quick Comps...';
+  const form = new FormData();
+  form.append('file', file);
+
+  try {
+    const res = await fetch('/upload-quick-comps', { method: 'POST', body: form });
+    const data = await res.json();
+    if (!res.ok) {
+      status.textContent = data.message || 'Could not import Quick Comps.';
+      return;
+    }
+    sub_competitors[ticker] = data.competitors;
+    renderSubRows(ticker);
+    status.textContent = `Imported ${data.competitors.length} competitors.`;
+  } catch (err) {
+    status.textContent = 'Could not reach the server.';
+  } finally {
+    input.value = '';
+  }
 }
 
 function updateSub(ticker, i, key, val) {
@@ -367,4 +412,5 @@ autopopulate();
 </script>
 
 
+<script src="/static/autosave.js" defer></script>
 </body></html>

@@ -3,276 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home</title>
+  <title>Equity Valuation Tool</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0a0a0a;
-      --surface:  #111111;
-      --border:   #1e1e1e;
-      --accent:   #c8f04a;
-      --text:     #e8e8e8;
-      --muted:    #555;
+      --bg: #0d0f12;
+      --surface: #13161b;
+      --surface2: #1a1e25;
+      --border: #262b35;
+      --accent: #c8f04d;
+      --text: #e8eaf0;
+      --muted: #8b94a3;
+      --dim: #6b7280;
+      --radius: 8px;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'DM Mono', monospace;
+      font-size: 13px;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
     }
 
-    /* ── Noise grain overlay ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: .35;
-    }
-
-    /* ── Nav ── */
     nav {
-      display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 1.4rem 2.5rem;
       border-bottom: 1px solid var(--border);
-      animation: fadeDown .6s ease both;
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 40px;
     }
 
     .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.1rem;
-      letter-spacing: -.02em;
       color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     nav ul {
-      list-style: none;
+      align-items: center;
       display: flex;
-      gap: 2rem;
+      gap: 24px;
+      list-style: none;
     }
 
     nav a {
+      color: var(--dim);
+      font-size: 11px;
+      letter-spacing: 0.1em;
       text-decoration: none;
-      color: var(--muted);
-      font-size: .8rem;
-      letter-spacing: .08em;
       text-transform: uppercase;
-      transition: color .2s;
+      transition: color 0.15s;
     }
 
-    nav a:hover { color: var(--text); }
-
-    /* ── Hero ── */
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6rem 2.5rem 4rem;
-      max-width: 900px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .72rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+    nav a:hover,
+    nav a.active {
       color: var(--accent);
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp .5s .2s ease forwards;
     }
 
-    .tag::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--accent);
+    main {
+      margin: 0 auto;
+      max-width: 960px;
+      padding: 56px 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
     }
 
     h1 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      line-height: .95;
-      letter-spacing: -.04em;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp .6s .35s ease forwards;
-    }
-
-    h1 span {
-      color: transparent;
-      -webkit-text-stroke: 1px var(--muted);
-    }
-
-    .sub {
-      font-size: .95rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 480px;
-      margin-bottom: 3rem;
-      opacity: 0;
-      animation: fadeUp .6s .5s ease forwards;
-    }
-
-    .actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp .6s .65s ease forwards;
-    }
-
-    .btn {
-      text-decoration: none;
-      font-family: 'DM Mono', monospace;
-      font-size: .8rem;
-      letter-spacing: .06em;
-      padding: .85rem 1.8rem;
-      border-radius: 2px;
-      transition: transform .15s, box-shadow .15s;
-    }
-
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #0a0a0a;
+      color: var(--text);
+      font-family: 'DM Serif Display', serif;
+      font-size: 34px;
       font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 12px;
     }
 
-    .btn-primary:hover { box-shadow: 0 6px 24px rgba(200,240,74,.25); }
-
-    .btn-ghost {
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .btn-ghost:hover { border-color: var(--muted); }
-
-    /* ── Status strip ── */
-    .status-strip {
-      display: flex;
-      gap: 2.5rem;
-      padding: 1.5rem 2.5rem;
-      border-top: 1px solid var(--border);
-      opacity: 0;
-      animation: fadeUp .5s .8s ease forwards;
-    }
-
-    .stat label {
-      display: block;
-      font-size: .68rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
+    .intro {
       color: var(--muted);
-      margin-bottom: .3rem;
+      line-height: 1.7;
+      max-width: 680px;
+      margin-bottom: 32px;
     }
 
-    .stat span {
-      font-size: .9rem;
+    .tool-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: inherit;
+      display: block;
+      min-height: 176px;
+      padding: 22px;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    }
+
+    .tool-card:hover {
+      background: var(--surface2);
+      border-color: rgba(200,240,77,0.5);
+      transform: translateY(-2px);
+    }
+
+    .tool-label {
+      color: var(--accent);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .tool-title {
+      color: var(--text);
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .tool-desc {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .status-row {
+      border-top: 1px solid var(--border);
+      color: var(--dim);
+      display: flex;
+      gap: 28px;
+      margin-top: 34px;
+      padding-top: 18px;
+    }
+
+    .status-row span {
       color: var(--text);
     }
 
-    .dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin-right: .4rem;
-      animation: pulse 2s ease-in-out infinite;
-    }
+    @media (max-width: 720px) {
+      nav {
+        align-items: flex-start;
+        gap: 18px;
+        padding: 18px 24px;
+      }
 
-    /* ── Floating grid accent ── */
-    .grid-accent {
-      position: fixed;
-      right: -60px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 340px;
-      height: 340px;
-      opacity: .06;
-      pointer-events: none;
-    }
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
 
-    .grid-accent line { stroke: var(--accent); stroke-width: .5; }
-
-    /* ── Keyframes ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(200,240,74,.5); }
-      50%       { box-shadow: 0 0 0 5px rgba(200,240,74,0); }
+      .status-row {
+        flex-direction: column;
+        gap: 8px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- Grid accent -->
-  <svg class="grid-accent" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
-    {% for i in range(0, 341, 34) %}
-      <line x1="{{ i }}" y1="0" x2="{{ i }}" y2="340"/>
-      <line x1="0" y1="{{ i }}" x2="340" y2="{{ i }}"/>
-    {% endfor %}
-  </svg>
-
   <nav>
-    <div class="logo">FINANCIAL SERVICE</div>
+    <div class="logo">Financial Service</div>
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a class="active" href="/">Home</a></li>
       <li><a href="/pe">PE</a></li>
+      <li><a href="/dcf">DCF</a></li>
     </ul>
   </nav>
 
-  <main class="hero">
-    <div class="tag">Running locally</div>
-    <h1>Hello,<br /><span>World.</span></h1>
-    <p class="sub">Your Flask server is up and running. Start building routes, templates, and APIs from here.</p>
-    <div class="actions">
-      <a href="/ping-test" class="btn btn-primary">GET /ping</a>
-      <a href="#" class="btn btn-ghost">Read the Docs</a>
+  <main>
+    <div class="eyebrow">Local valuation workspace</div>
+    <h1>Equity Valuation Tool</h1>
+    <p class="intro">
+      Choose a valuation workflow to begin. Your work is saved locally while you move through the app.
+    </p>
+
+    <section class="tool-grid">
+      <a class="tool-card" href="/pe">
+        <div class="tool-label">Comparable analysis</div>
+        <div class="tool-title">PE Model</div>
+        <p class="tool-desc">Build competitor sets, calculate P/E multiples, and estimate implied share price.</p>
+      </a>
+
+      <a class="tool-card" href="/dcf">
+        <div class="tool-label">Intrinsic valuation</div>
+        <div class="tool-title">DCF Model</div>
+        <p class="tool-desc">Collect company filings, source financial statements, and work through DCF analysis steps.</p>
+      </a>
+    </section>
+
+    <div class="status-row">
+      <div>Status: <span>Online</span></div>
+      <div>Server: <span>Flask</span></div>
+      <div>Autosave: <span>Enabled</span></div>
     </div>
   </main>
-
-  <div class="status-strip">
-    <div class="stat">
-      <label>Status</label>
-      <span><span class="dot"></span>Online</span>
-    </div>
-    <div class="stat">
-      <label>Server</label>
-      <span>Flask / Python</span>
-    </div>
-    <div class="stat">
-      <label>Mode</label>
-      <span>Debug</span>
-    </div>
-  </div>
-
 </body>
 </html>

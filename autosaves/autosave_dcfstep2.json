@@ -1,0 +1,55 @@
+{
+  "saved_at": "2026-06-11T14:58:42.413165+00:00",
+  "page": "autosave:/dcf?step=2",
+  "url": "http://127.0.0.1:5000/dcf?step=2",
+  "fields": {
+    "#macro_analysis": {
+      "value": "",
+      "type": "textarea"
+    },
+    "input:2": {
+      "value": "",
+      "type": "text"
+    },
+    "input:3": {
+      "value": "Alphabet Inc.",
+      "type": "text"
+    },
+    "input:4": {
+      "value": "NasdaqGS",
+      "type": "text"
+    },
+    "input:5": {
+      "value": "",
+      "type": "number"
+    },
+    "input:6": {
+      "value": "",
+      "type": "number"
+    },
+    "input:7": {
+      "value": "",
+      "type": "number"
+    },
+    "input:8": {
+      "value": "",
+      "type": "number"
+    },
+    "input:9": {
+      "value": "",
+      "type": "number"
+    },
+    "input:10": {
+      "value": "",
+      "type": "number"
+    },
+    "input:11": {
+      "value": "",
+      "type": "number"
+    },
+    "input:12": {
+      "value": "",
+      "type": "number"
+    }
+  }
+}

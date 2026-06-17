@@ -36,7 +36,52 @@
     font-family: 'DM Mono', monospace;
     font-size: 13px;
     min-height: 100vh;
-    padding: 32px 24px;
+    padding: 0 24px 32px;
+  }
+
+  .app-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -24px 32px;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .app-logo {
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .app-nav ul {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .app-nav a {
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.15s;
+  }
+
+  .app-nav a:hover,
+  .app-nav a.active {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .app-nav {
+      padding: 18px 24px;
+    }
   }
 
   .step-label {
@@ -301,7 +346,16 @@
 </head>
 <body>
 
-<div class="step-label">Step 1 of N</div>
+<nav class="app-nav">
+  <a class="app-logo" href="/">Financial Service</a>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a class="active" href="/pe">PE</a></li>
+    <li><a href="/dcf">DCF</a></li>
+  </ul>
+</nav>
+
+<div class="step-label">Step 1 of 3</div>
 <h1>Competitor Identification</h1>
 
 <div style="display:flex; gap:8px; margin-bottom:24px;">
@@ -397,6 +451,11 @@
   </div>
 
   <button class="btn-add" onclick="addRow()">+ Add more competitors</button>
+  <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+    <input type="file" id="quick-comps-input" accept=".xls,.xlsx" style="display:none" onchange="uploadQuickComps(this)">
+    <button class="btn-sec" onclick="document.getElementById('quick-comps-input').click()">Upload Quick Comps</button>
+    <span class="hint" id="quick-comps-status"></span>
+  </div>
 
   <div class="note">
     ℹ️ This list is stored as the <strong style="color:var(--accent)">longlist</strong>. An "Information Source" column (e.g. CapitalIQ, 10-K year) may be added in a later version.
@@ -426,6 +485,44 @@
     const tbody = document.getElementById('comp_rows');
     if (tbody.rows.length <= 1) return;
     btn.closest('tr').remove();
+  }
+
+  function renderCompetitorRows(competitors) {
+    const tbody = document.getElementById('comp_rows');
+    tbody.innerHTML = '';
+    competitors.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" value="${c.company_name || ''}" placeholder="Competitor name" /></td>
+        <td><input type="text" value="${c.trading_exchange || ''}" placeholder="e.g. NASDAQ" /></td>
+        <td><input type="text" value="${c.ticker_symbol || ''}" placeholder="e.g. MSFT" style="text-transform:uppercase" /></td>
+        <td class="td-action"><button class="btn-del" onclick="delRow(this)">×</button></td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function uploadQuickComps(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const status = document.getElementById('quick-comps-status');
+    status.textContent = 'Importing Quick Comps...';
+    const form = new FormData();
+    form.append('file', file);
+
+    try {
+      const res = await fetch('/upload-quick-comps', { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok) {
+        status.textContent = data.message || 'Could not import Quick Comps.';
+        return;
+      }
+      renderCompetitorRows(data.competitors);
+      status.textContent = `Imported ${data.competitors.length} competitors from ${data.sheet_name}.`;
+    } catch (err) {
+      status.textContent = 'Could not reach the server.';
+    } finally {
+      input.value = '';
+    }
   }
 
   function clearForm() {
@@ -575,4 +672,5 @@
 </script>
 
 
+<script src="/static/autosave.js" defer></script>
 </body></html>
