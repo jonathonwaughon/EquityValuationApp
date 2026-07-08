@@ -196,6 +196,149 @@
     align-self: center;
   }
 
+  .company-tabs {
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 6px;
+    margin-top: 18px;
+    overflow-x: auto;
+    padding-bottom: 0;
+  }
+
+  .company-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: var(--text-dim);
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 9px 12px;
+  }
+
+  .company-tab.active {
+    background: var(--surface2);
+    color: var(--accent);
+  }
+
+  .company-toolbar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+
+  .company-title {
+    color: var(--text);
+    font-size: 12px;
+  }
+
+  .ratio-cell {
+    color: var(--text-dim);
+    padding: 7px 8px;
+  }
+
+  .plot-panel {
+    background: #050505;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-top: 16px;
+    padding: 18px;
+  }
+
+  .plot-canvas {
+    display: block;
+    height: 420px;
+    width: 100%;
+  }
+
+  .plot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-top: 14px;
+  }
+
+  .legend-item {
+    align-items: center;
+    color: var(--text-dim);
+    display: inline-flex;
+    font-size: 11px;
+    gap: 7px;
+  }
+
+  .legend-dot {
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+  }
+
+  .cash-flow-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .cash-flow-summary {
+    display: grid;
+    gap: 8px;
+  }
+
+  .cash-flow-line {
+    align-items: center;
+    color: var(--text-dim);
+    display: grid;
+    gap: 10px;
+    grid-template-columns: minmax(230px, 1fr) minmax(120px, 180px) 52px;
+  }
+
+  .cash-flow-line input {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 7px 8px;
+    width: 100%;
+  }
+
+  .cash-flow-sign {
+    color: var(--accent);
+  }
+
+  .analysis-note {
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+
+  .mini-textarea {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    min-height: 38px;
+    outline: none;
+    padding: 7px 8px;
+    resize: vertical;
+    width: 100%;
+  }
+
+  .mini-textarea:focus {
+    background: var(--surface2);
+    border-color: var(--accent);
+  }
+
   .btn-del {
     background: none;
     border: none;
@@ -276,6 +419,73 @@
     color: var(--text);
   }
 
+  .modal-backdrop {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.62);
+    display: none;
+    inset: 0;
+    justify-content: center;
+    padding: 24px;
+    position: fixed;
+    z-index: 20;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    max-width: 460px;
+    padding: 22px;
+    width: 100%;
+  }
+
+  .modal h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+
+  .field {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 12px;
+  }
+
+  .field label {
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .field input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    padding: 10px 12px;
+  }
+
+  .field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 18px;
+  }
+
   @media (max-width: 640px) {
     .app-nav { padding: 18px 24px; }
     .footer-row {
@@ -323,23 +533,15 @@
   <div class="source-actions">
     <input type="file" id="dcf-quick-comps-input" accept=".xls,.xlsx" style="display:none" onchange="uploadDcfQuickComps(this)">
     <button class="btn-sec" onclick="document.getElementById('dcf-quick-comps-input').click()">Upload Quick Comps</button>
-    <button class="btn-sec" onclick="addIndustryCompetitor()">Input manually</button>
-    <button class="btn-sec" onclick="autofillTargetDupont()">Autofill Target Financials</button>
+    <button class="btn-sec" onclick="openCompanyModal()">Add New Company</button>
     <span class="hint" id="dcf-quick-comps-status"></span>
   </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Company Name</th>
-          <th>Trading Exchange</th>
-          <th>Ticker Symbol</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="industry-comp-body"></tbody>
-    </table>
+  <div class="company-tabs" id="company-tabs"></div>
+
+  <div class="company-toolbar">
+    <div class="company-title" id="active-company-title"></div>
+    <button class="btn-sec" onclick="autofillActiveCompanyFromEdgar()">Auto-source from EDGAR</button>
   </div>
 
   <div class="table-wrap">
@@ -347,6 +549,83 @@
       <thead id="dupont-head"></thead>
       <tbody id="dupont-body"></tbody>
     </table>
+  </div>
+  <table style="display:none"><tbody id="industry-comp-body"></tbody></table>
+</div>
+
+<div class="card">
+  <div class="card-label">UI2-3 - Cross-company Comparison Plot</div>
+  <p class="card-desc">Compare ROS and asset-turnover across the companies and years entered above.</p>
+
+  <div class="source-actions">
+    <button class="btn-sec" onclick="refreshComparisonPlot()">Refresh Plot</button>
+    <span class="hint" id="plot-status"></span>
+  </div>
+
+  <div class="plot-panel">
+    <canvas class="plot-canvas" id="comparison-plot"></canvas>
+    <div class="plot-legend" id="comparison-legend"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label">UI2-4 - Cash Flow Analysis</div>
+  <p class="card-desc">Review operating, investing, and financing cash flows across the five-year analysis period.</p>
+
+  <div class="cash-flow-box">
+    <div class="cash-flow-summary" id="cash-flow-summary"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead id="cash-flow-head"></thead>
+      <tbody id="cash-flow-body"></tbody>
+    </table>
+  </div>
+
+  <p class="analysis-note" id="cash-flow-combined-note"></p>
+
+  <p class="card-desc">General explanation for what the company is doing each year.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Explanation</th>
+        </tr>
+      </thead>
+      <tbody id="cash-flow-explanation-body"></tbody>
+    </table>
+  </div>
+
+  <div class="cash-flow-box">
+    <p class="analysis-note" id="cash-flow-prompt"></p>
+    <label class="field" for="cash-negative">
+      <span>Is cash negative?</span>
+      <textarea class="mini-textarea" id="cash-negative" placeholder="Write response here..."></textarea>
+    </label>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="company-modal">
+  <div class="modal">
+    <h2>Add Company</h2>
+    <div class="field">
+      <label for="new-company-name">Company Name</label>
+      <input id="new-company-name" type="text" placeholder="e.g. Alphabet Inc.">
+    </div>
+    <div class="field">
+      <label for="new-company-exchange">Trading Exchange</label>
+      <input id="new-company-exchange" type="text" placeholder="e.g. NasdaqGS">
+    </div>
+    <div class="field">
+      <label for="new-company-ticker">Ticker Symbol</label>
+      <input id="new-company-ticker" type="text" placeholder="e.g. GOOGL" style="text-transform:uppercase">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sec" onclick="closeCompanyModal()">Cancel</button>
+      <button class="btn-next" onclick="enterNewCompany()">Enter</button>
+    </div>
   </div>
 </div>
 
@@ -492,6 +771,43 @@
     }
   }
 
+  async function autofillCompetitorDupont() {
+    const status = document.getElementById('dcf-quick-comps-status');
+    const saved = await saveIndustryAnalysis({ silent: true });
+    if (!saved) {
+      status.textContent = 'Save competitors before auto-sourcing financials.';
+      return;
+    }
+
+    status.textContent = 'Auto-sourcing competitor financials from EDGAR...';
+
+    try {
+      const res = await fetch('/autofill-dcf-dupont-competitors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      const data = await res.json();
+      if (!res.ok || !['ok', 'partial'].includes(data.status)) {
+        status.textContent = data.message || 'Could not auto-source competitor financials.';
+        return;
+      }
+
+      Object.entries(data.values_by_ticker || {}).forEach(([ticker, values]) => {
+        dupontData[ticker] = {
+          ...(dupontData[ticker] || {}),
+          ...values,
+        };
+      });
+      renderDupontTable();
+
+      const missed = (data.failures || []).length;
+      status.textContent = missed ? `${data.message} ${missed} need manual input.` : data.message;
+    } catch (err) {
+      status.textContent = 'Could not reach the server.';
+    }
+  }
+
   function collectDupontData() {
     document.querySelectorAll('#dupont-body input').forEach(input => input.dispatchEvent(new Event('input')));
     return dupontData;
@@ -546,7 +862,7 @@
     }
   }
 
-  async function saveIndustryAnalysis() {
+  async function saveIndustryAnalysis(options = {}) {
     const competitors = industryCompetitors.filter(c => c.company_name || c.ticker_symbol);
     const res = await fetch('/submit-dcf', {
       method: 'POST',
@@ -559,15 +875,21 @@
     });
 
     if (!res.ok) {
-      document.getElementById('save-status').textContent = 'Macro saved, but industry analysis could not be saved.';
-      return;
+      if (!options.silent) {
+        document.getElementById('save-status').textContent = 'Macro saved, but industry analysis could not be saved.';
+      }
+      return false;
     }
-    document.getElementById('save-status').textContent = 'Step 2 saved.';
+    if (!options.silent) {
+      document.getElementById('save-status').textContent = 'Step 2 saved.';
+    }
+    return true;
   }
 
-  autopopulate();
+  // Legacy loader is replaced by /static/dcf_step2_tabs.js.
 </script>
 
+<script src="/static/dcf_step2_tabs.js" defer></script>
 <script src="/static/autosave.js" defer></script>
 </body>
 </html>

@@ -24,3 +24,9 @@ class dcf_state:
     macro_analysis: str = ""
     industry_competitors: list[dict[str, str]] = field(default_factory=list)
     dupont_data: dict[str, dict[str, str]] = field(default_factory=dict)
+    cash_flow_analysis: dict = field(default_factory=dict)
+    analyst_estimate_files: list[dict[str, str]] = field(default_factory=list)
+    analyst_estimate_summary: dict = field(default_factory=dict)
+    forecast_assumptions: dict = field(default_factory=dict)
+    fcf_forecast: dict = field(default_factory=dict)
+    dcf_valuation: dict = field(default_factory=dict)

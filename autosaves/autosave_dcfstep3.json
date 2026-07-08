@@ -1,0 +1,667 @@
+{
+  "saved_at": "2026-07-08T12:05:17.191585+00:00",
+  "page": "autosave:/dcf?step=3",
+  "url": "http://127.0.0.1:5000/dcf?step=3",
+  "fields": {
+    "input:1": {
+      "value": "",
+      "type": "number"
+    },
+    "input:2": {
+      "value": "1945.0",
+      "type": "number"
+    },
+    "input:3": {
+      "value": "1825.0",
+      "type": "number"
+    },
+    "input:4": {
+      "value": "1870.0",
+      "type": "number"
+    },
+    "input:5": {
+      "value": "1007.0",
+      "type": "number"
+    },
+    "input:6": {
+      "value": "1431.0",
+      "type": "number"
+    },
+    "input:7": {
+      "value": "1475.0",
+      "type": "number"
+    },
+    "input:8": {
+      "value": "1450.0",
+      "type": "number"
+    },
+    "input:9": {
+      "value": "1375.0",
+      "type": "number"
+    },
+    "input:10": {
+      "value": "1495.0",
+      "type": "number"
+    },
+    "input:11": {
+      "value": "1429.0",
+      "type": "number"
+    },
+    "input:12": {
+      "value": "",
+      "type": "number"
+    },
+    "input:13": {
+      "value": "",
+      "type": "number"
+    },
+    "input:14": {
+      "value": "-0.0617",
+      "type": "number"
+    },
+    "input:15": {
+      "value": "0.0247",
+      "type": "number"
+    },
+    "input:16": {
+      "value": "-0.4615",
+      "type": "number"
+    },
+    "input:17": {
+      "value": "0.4211",
+      "type": "number"
+    },
+    "input:18": {
+      "value": "0.0307",
+      "type": "number"
+    },
+    "input:19": {
+      "value": "-0.0169",
+      "type": "number"
+    },
+    "input:20": {
+      "value": "-0.0517",
+      "type": "number"
+    },
+    "input:21": {
+      "value": "0.0873",
+      "type": "number"
+    },
+    "input:22": {
+      "value": "-0.0441",
+      "type": "number"
+    },
+    "input:23": {
+      "value": "",
+      "type": "number"
+    },
+    "input:24": {
+      "value": "98.0",
+      "type": "number"
+    },
+    "input:25": {
+      "value": "131.0",
+      "type": "number"
+    },
+    "input:26": {
+      "value": "174.0",
+      "type": "number"
+    },
+    "input:27": {
+      "value": "227.0",
+      "type": "number"
+    },
+    "input:28": {
+      "value": "484.0",
+      "type": "number"
+    },
+    "input:29": {
+      "value": "473.0",
+      "type": "number"
+    },
+    "input:30": {
+      "value": "464.0",
+      "type": "number"
+    },
+    "input:31": {
+      "value": "846.0",
+      "type": "number"
+    },
+    "input:32": {
+      "value": "579.0",
+      "type": "number"
+    },
+    "input:33": {
+      "value": "623.0",
+      "type": "number"
+    },
+    "input:34": {
+      "value": "",
+      "type": "number"
+    },
+    "input:35": {
+      "value": "0.0504",
+      "type": "number"
+    },
+    "input:36": {
+      "value": "0.0718",
+      "type": "number"
+    },
+    "input:37": {
+      "value": "0.093",
+      "type": "number"
+    },
+    "input:38": {
+      "value": "0.2254",
+      "type": "number"
+    },
+    "input:39": {
+      "value": "0.3382",
+      "type": "number"
+    },
+    "input:40": {
+      "value": "0.3207",
+      "type": "number"
+    },
+    "input:41": {
+      "value": "0.32",
+      "type": "number"
+    },
+    "input:42": {
+      "value": "0.6153",
+      "type": "number"
+    },
+    "input:43": {
+      "value": "0.3873",
+      "type": "number"
+    },
+    "input:44": {
+      "value": "0.436",
+      "type": "number"
+    },
+    "input:45": {
+      "value": "",
+      "type": "number"
+    },
+    "input:46": {
+      "value": "",
+      "type": "number"
+    },
+    "input:47": {
+      "value": "",
+      "type": "number"
+    },
+    "input:48": {
+      "value": "",
+      "type": "number"
+    },
+    "input:49": {
+      "value": "",
+      "type": "number"
+    },
+    "input:50": {
+      "value": "",
+      "type": "number"
+    },
+    "input:51": {
+      "value": "",
+      "type": "number"
+    },
+    "input:52": {
+      "value": "",
+      "type": "number"
+    },
+    "input:53": {
+      "value": "",
+      "type": "number"
+    },
+    "input:54": {
+      "value": "",
+      "type": "number"
+    },
+    "input:55": {
+      "value": "",
+      "type": "number"
+    },
+    "input:56": {
+      "value": "",
+      "type": "number"
+    },
+    "input:57": {
+      "value": "",
+      "type": "number"
+    },
+    "input:58": {
+      "value": "",
+      "type": "number"
+    },
+    "input:59": {
+      "value": "",
+      "type": "number"
+    },
+    "input:60": {
+      "value": "",
+      "type": "number"
+    },
+    "input:61": {
+      "value": "",
+      "type": "number"
+    },
+    "input:62": {
+      "value": "",
+      "type": "number"
+    },
+    "input:63": {
+      "value": "",
+      "type": "number"
+    },
+    "input:64": {
+      "value": "",
+      "type": "number"
+    },
+    "input:65": {
+      "value": "",
+      "type": "number"
+    },
+    "input:66": {
+      "value": "",
+      "type": "number"
+    },
+    "input:67": {
+      "value": "",
+      "type": "number"
+    },
+    "input:68": {
+      "value": "10",
+      "type": "number"
+    },
+    "input:69": {
+      "value": "",
+      "type": "number"
+    },
+    "input:70": {
+      "value": "",
+      "type": "number"
+    },
+    "input:71": {
+      "value": "",
+      "type": "number"
+    },
+    "input:72": {
+      "value": "",
+      "type": "number"
+    },
+    "input:73": {
+      "value": "",
+      "type": "number"
+    },
+    "input:74": {
+      "value": "",
+      "type": "number"
+    },
+    "input:75": {
+      "value": "",
+      "type": "number"
+    },
+    "input:76": {
+      "value": "",
+      "type": "number"
+    },
+    "input:77": {
+      "value": "",
+      "type": "number"
+    },
+    "input:78": {
+      "value": "",
+      "type": "number"
+    },
+    "input:79": {
+      "value": "",
+      "type": "number"
+    },
+    "input:80": {
+      "value": "",
+      "type": "number"
+    },
+    "input:81": {
+      "value": "",
+      "type": "number"
+    },
+    "input:82": {
+      "value": "",
+      "type": "number"
+    },
+    "input:83": {
+      "value": "",
+      "type": "number"
+    },
+    "input:84": {
+      "value": "",
+      "type": "number"
+    },
+    "input:85": {
+      "value": "",
+      "type": "number"
+    },
+    "input:86": {
+      "value": "",
+      "type": "number"
+    },
+    "input:87": {
+      "value": "",
+      "type": "number"
+    },
+    "input:88": {
+      "value": "",
+      "type": "number"
+    },
+    "input:89": {
+      "value": "",
+      "type": "number"
+    },
+    "input:90": {
+      "value": "",
+      "type": "number"
+    },
+    "input:91": {
+      "value": "",
+      "type": "number"
+    },
+    "input:92": {
+      "value": "",
+      "type": "number"
+    },
+    "input:93": {
+      "value": "",
+      "type": "number"
+    },
+    "input:94": {
+      "value": "",
+      "type": "number"
+    },
+    "input:95": {
+      "value": "",
+      "type": "number"
+    },
+    "input:96": {
+      "value": "",
+      "type": "number"
+    },
+    "input:97": {
+      "value": "",
+      "type": "number"
+    },
+    "input:98": {
+      "value": "",
+      "type": "number"
+    },
+    "input:99": {
+      "value": "",
+      "type": "number"
+    },
+    "input:100": {
+      "value": "",
+      "type": "number"
+    },
+    "input:101": {
+      "value": "",
+      "type": "number"
+    },
+    "input:102": {
+      "value": "",
+      "type": "number"
+    },
+    "input:103": {
+      "value": "",
+      "type": "number"
+    },
+    "input:104": {
+      "value": "",
+      "type": "number"
+    },
+    "input:105": {
+      "value": "",
+      "type": "number"
+    },
+    "input:106": {
+      "value": "",
+      "type": "number"
+    },
+    "input:107": {
+      "value": "",
+      "type": "number"
+    },
+    "input:108": {
+      "value": "",
+      "type": "number"
+    },
+    "input:109": {
+      "value": "",
+      "type": "number"
+    },
+    "input:110": {
+      "value": "",
+      "type": "number"
+    },
+    "input:111": {
+      "value": "",
+      "type": "number"
+    },
+    "input:112": {
+      "value": "10",
+      "type": "number"
+    },
+    "input:113": {
+      "value": "",
+      "type": "number"
+    },
+    "input:114": {
+      "value": "",
+      "type": "number"
+    },
+    "input:115": {
+      "value": "",
+      "type": "number"
+    },
+    "input:116": {
+      "value": "",
+      "type": "number"
+    },
+    "input:117": {
+      "value": "",
+      "type": "number"
+    },
+    "input:118": {
+      "value": "",
+      "type": "number"
+    },
+    "input:119": {
+      "value": "",
+      "type": "number"
+    },
+    "input:120": {
+      "value": "",
+      "type": "number"
+    },
+    "input:121": {
+      "value": "",
+      "type": "number"
+    },
+    "input:122": {
+      "value": "",
+      "type": "number"
+    },
+    "input:123": {
+      "value": "",
+      "type": "number"
+    },
+    "input:124": {
+      "value": "",
+      "type": "number"
+    },
+    "input:125": {
+      "value": "",
+      "type": "number"
+    },
+    "input:126": {
+      "value": "",
+      "type": "number"
+    },
+    "input:127": {
+      "value": "",
+      "type": "number"
+    },
+    "input:128": {
+      "value": "",
+      "type": "number"
+    },
+    "input:129": {
+      "value": "",
+      "type": "number"
+    },
+    "input:130": {
+      "value": "",
+      "type": "number"
+    },
+    "input:131": {
+      "value": "",
+      "type": "number"
+    },
+    "input:132": {
+      "value": "",
+      "type": "number"
+    },
+    "input:133": {
+      "value": "",
+      "type": "number"
+    },
+    "input:134": {
+      "value": "",
+      "type": "number"
+    },
+    "input:135": {
+      "value": "",
+      "type": "number"
+    },
+    "input:136": {
+      "value": "",
+      "type": "number"
+    },
+    "input:137": {
+      "value": "",
+      "type": "number"
+    },
+    "input:138": {
+      "value": "",
+      "type": "number"
+    },
+    "input:139": {
+      "value": "",
+      "type": "number"
+    },
+    "input:140": {
+      "value": "",
+      "type": "number"
+    },
+    "input:141": {
+      "value": "",
+      "type": "number"
+    },
+    "input:142": {
+      "value": "",
+      "type": "number"
+    },
+    "input:143": {
+      "value": "",
+      "type": "number"
+    },
+    "input:144": {
+      "value": "",
+      "type": "number"
+    },
+    "input:145": {
+      "value": "",
+      "type": "number"
+    },
+    "input:146": {
+      "value": "",
+      "type": "number"
+    },
+    "input:147": {
+      "value": "",
+      "type": "number"
+    },
+    "input:148": {
+      "value": "",
+      "type": "number"
+    },
+    "input:149": {
+      "value": "",
+      "type": "number"
+    },
+    "input:150": {
+      "value": "",
+      "type": "number"
+    },
+    "input:151": {
+      "value": "",
+      "type": "number"
+    },
+    "input:152": {
+      "value": "",
+      "type": "number"
+    },
+    "input:153": {
+      "value": "",
+      "type": "number"
+    },
+    "input:154": {
+      "value": "",
+      "type": "number"
+    },
+    "input:155": {
+      "value": "",
+      "type": "number"
+    },
+    "input:156": {
+      "value": "",
+      "type": "number"
+    },
+    "input:157": {
+      "value": "",
+      "type": "number"
+    },
+    "input:158": {
+      "value": "",
+      "type": "number"
+    },
+    "input:159": {
+      "value": "",
+      "type": "number"
+    },
+    "input:160": {
+      "value": "",
+      "type": "number"
+    },
+    "input:161": {
+      "value": "",
+      "type": "number"
+    },
+    "input:162": {
+      "value": "",
+      "type": "number"
+    },
+    "input:163": {
+      "value": "",
+      "type": "number"
+    },
+    "input:164": {
+      "value": "",
+      "type": "number"
+    },
+    "input:165": {
+      "value": "",
+      "type": "number"
+    }
+  }
+}

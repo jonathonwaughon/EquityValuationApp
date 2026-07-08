@@ -1,55 +1,207 @@
 {
-  "saved_at": "2026-06-11T14:58:42.413165+00:00",
+  "saved_at": "2026-07-07T22:53:42.152778+00:00",
   "page": "autosave:/dcf?step=2",
   "url": "http://127.0.0.1:5000/dcf?step=2",
   "fields": {
     "#macro_analysis": {
-      "value": "",
+      "value": "BLAAAHHHH",
       "type": "textarea"
     },
     "input:2": {
-      "value": "",
-      "type": "text"
+      "value": "132170000000.0",
+      "type": "number"
     },
     "input:3": {
-      "value": "Alphabet Inc.",
-      "type": "text"
+      "value": "100118000000.0",
+      "type": "number"
     },
     "input:4": {
-      "value": "NasdaqGS",
-      "type": "text"
+      "value": "73795000000.0",
+      "type": "number"
     },
     "input:5": {
-      "value": "",
+      "value": "59972000000.0",
       "type": "number"
     },
     "input:6": {
-      "value": "",
+      "value": "76033000000.0",
       "type": "number"
     },
     "input:7": {
-      "value": "",
+      "value": "402836000000.0",
       "type": "number"
     },
     "input:8": {
-      "value": "",
+      "value": "350018000000.0",
       "type": "number"
     },
     "input:9": {
-      "value": "",
+      "value": "307394000000.0",
       "type": "number"
     },
     "input:10": {
-      "value": "",
+      "value": "282836000000.0",
       "type": "number"
     },
     "input:11": {
-      "value": "",
+      "value": "257637000000.0",
       "type": "number"
     },
     "input:12": {
+      "value": "595281000000.0",
+      "type": "number"
+    },
+    "input:13": {
+      "value": "450256000000.0",
+      "type": "number"
+    },
+    "input:14": {
+      "value": "402392000000.0",
+      "type": "number"
+    },
+    "input:15": {
+      "value": "365264000000.0",
+      "type": "number"
+    },
+    "input:16": {
+      "value": "359268000000.0",
+      "type": "number"
+    },
+    "input:17": {
+      "value": "415265000000.0",
+      "type": "number"
+    },
+    "input:18": {
+      "value": "325084000000.0",
+      "type": "number"
+    },
+    "input:19": {
+      "value": "283379000000.0",
+      "type": "number"
+    },
+    "input:20": {
+      "value": "256144000000.0",
+      "type": "number"
+    },
+    "input:21": {
+      "value": "251635000000.0",
+      "type": "number"
+    },
+    "input:22": {
+      "value": "10000",
+      "type": "number"
+    },
+    "input:23": {
+      "value": "122222222",
+      "type": "number"
+    },
+    "input:24": {
+      "value": "-000200",
+      "type": "number"
+    },
+    "input:25": {
+      "value": "121",
+      "type": "number"
+    },
+    "input:26": {
+      "value": "31313",
+      "type": "number"
+    },
+    "input:27": {
+      "value": "10000",
+      "type": "number"
+    },
+    "input:28": {
+      "value": "122222222",
+      "type": "number"
+    },
+    "input:29": {
+      "value": "-000200",
+      "type": "number"
+    },
+    "input:30": {
+      "value": "121",
+      "type": "number"
+    },
+    "input:31": {
+      "value": "31313",
+      "type": "number"
+    },
+    "input:32": {
       "value": "",
       "type": "number"
+    },
+    "input:33": {
+      "value": "",
+      "type": "number"
+    },
+    "input:34": {
+      "value": "",
+      "type": "number"
+    },
+    "input:35": {
+      "value": "",
+      "type": "number"
+    },
+    "input:36": {
+      "value": "",
+      "type": "number"
+    },
+    "input:37": {
+      "value": "",
+      "type": "number"
+    },
+    "input:38": {
+      "value": "",
+      "type": "number"
+    },
+    "input:39": {
+      "value": "",
+      "type": "number"
+    },
+    "input:40": {
+      "value": "",
+      "type": "number"
+    },
+    "input:41": {
+      "value": "",
+      "type": "number"
+    },
+    "textarea:42": {
+      "value": "",
+      "type": "textarea"
+    },
+    "textarea:43": {
+      "value": "",
+      "type": "textarea"
+    },
+    "textarea:44": {
+      "value": "",
+      "type": "textarea"
+    },
+    "textarea:45": {
+      "value": "",
+      "type": "textarea"
+    },
+    "textarea:46": {
+      "value": "",
+      "type": "textarea"
+    },
+    "#cash-negative": {
+      "value": "",
+      "type": "textarea"
+    },
+    "#new-company-name": {
+      "value": "Alphabet",
+      "type": "text"
+    },
+    "#new-company-exchange": {
+      "value": "Nasdaq",
+      "type": "text"
+    },
+    "#new-company-ticker": {
+      "value": "GOOGL",
+      "type": "text"
     }
   }
 }

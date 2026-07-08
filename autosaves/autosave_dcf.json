@@ -1,5 +1,5 @@
 {
-  "saved_at": "2026-06-11T14:48:40.439128+00:00",
+  "saved_at": "2026-07-07T22:52:34.261498+00:00",
   "page": "autosave:/dcf",
   "url": "http://127.0.0.1:5000/dcf",
   "fields": {
@@ -28,7 +28,7 @@
       "type": "text"
     },
     "#edgar_identity": {
-      "value": "jwaughon27@cornellcollege.edu",
+      "value": "jwaughon27@gmail.com",
       "type": "text"
     }
   }

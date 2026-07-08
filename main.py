@@ -56,6 +56,8 @@ def dcf():
     templates = {
         "1": "dcf_page.html",
         "2": "dcf_page2.html",
+        "3": "dcf_page3.html",
+        "4": "dcf_page4.html",
     }
     return render_template(templates.get(step, "dcf_page.html"))
 
@@ -101,6 +103,12 @@ def get_dcf_state():
         "macro_analysis": dcf_current.macro_analysis,
         "industry_competitors": dcf_current.industry_competitors,
         "dupont_data": dcf_current.dupont_data,
+        "cash_flow_analysis": dcf_current.cash_flow_analysis,
+        "analyst_estimate_files": dcf_current.analyst_estimate_files,
+        "analyst_estimate_summary": dcf_current.analyst_estimate_summary,
+        "forecast_assumptions": dcf_current.forecast_assumptions,
+        "fcf_forecast": dcf_current.fcf_forecast,
+        "dcf_valuation": dcf_current.dcf_valuation,
     })
 
 @app.route("/submit-dcf", methods=["POST"])
@@ -132,6 +140,12 @@ def submit_dcf():
             dcf_current.macro_analysis = prior.macro_analysis
             dcf_current.industry_competitors = prior.industry_competitors
             dcf_current.dupont_data = prior.dupont_data
+            dcf_current.cash_flow_analysis = prior.cash_flow_analysis
+            dcf_current.analyst_estimate_files = prior.analyst_estimate_files
+            dcf_current.analyst_estimate_summary = prior.analyst_estimate_summary
+            dcf_current.forecast_assumptions = prior.forecast_assumptions
+            dcf_current.fcf_forecast = prior.fcf_forecast
+            dcf_current.dcf_valuation = prior.dcf_valuation
 
     elif submit_type == "dcf_step2":
         if dcf_current is None:
@@ -150,6 +164,22 @@ def submit_dcf():
             return jsonify({"status": "error", "message": "Complete Step 1 before Step 2."}), 400
         dcf_current.industry_competitors = data.get("industry_competitors", [])
         dcf_current.dupont_data = data.get("dupont_data", {})
+
+    elif submit_type == "dcf_step2_cash_flow":
+        if dcf_current is None:
+            return jsonify({"status": "error", "message": "Complete Step 1 before Step 2."}), 400
+        dcf_current.cash_flow_analysis = data.get("cash_flow_analysis", {})
+
+    elif submit_type == "dcf_step3":
+        if dcf_current is None:
+            return jsonify({"status": "error", "message": "Complete Step 1 before Step 3."}), 400
+        dcf_current.forecast_assumptions = data.get("forecast_assumptions", {})
+        dcf_current.fcf_forecast = data.get("fcf_forecast", {})
+
+    elif submit_type == "dcf_step4":
+        if dcf_current is None:
+            return jsonify({"status": "error", "message": "Complete Step 1 before Step 4."}), 400
+        dcf_current.dcf_valuation = data.get("dcf_valuation", {})
 
     else:
         return jsonify({"status": "error", "message": f"Unknown type '{submit_type}'"}), 400
@@ -318,6 +348,7 @@ def preview_dcf_file(category, filename):
     allowed_categories = {
         "10k": "10k",
         "financials": "financials",
+        "estimates": "estimates",
     }
     if category not in allowed_categories:
         return jsonify({"status": "error", "message": "Unknown preview category."}), 404
@@ -339,6 +370,7 @@ def _preview_file_path(category, filename):
     allowed_categories = {
         "10k": "10k",
         "financials": "financials",
+        "estimates": "estimates",
     }
     if category not in allowed_categories:
         return None, None
@@ -526,6 +558,28 @@ def _latest_statement_column(df):
             return col
     return None
 
+def _statement_year_columns(df, target_years=None):
+    metadata_cols = {"label", "concept", "standard_concept", "preferred_sign"}
+    year_cols = {}
+    target_years = [str(year) for year in target_years or []]
+
+    for col in df.columns:
+        col_text = str(col)
+        if col_text.lower() in metadata_cols:
+            continue
+        match = re.match(r"^(\d{4})(-\d{2}-\d{2})?$", col_text)
+        if not match:
+            continue
+        year = match.group(1)
+        if target_years and year not in target_years:
+            continue
+        if year not in year_cols:
+            year_cols[year] = col
+
+    if target_years:
+        return {year: year_cols[year] for year in target_years if year in year_cols}
+    return year_cols
+
 def _metric_candidates(metric):
     return {
         "net_income": {
@@ -576,6 +630,51 @@ def _extract_metric_from_statement_df(df, metric):
                     return number, str(value_col), label_cells
     return None
 
+def _extract_metric_timeseries_from_statement_df(df, metric, target_years=None):
+    if df is None or df.empty:
+        return {}, {}
+
+    year_cols = _statement_year_columns(df, target_years)
+    if not year_cols:
+        return {}, {}
+
+    candidates = _metric_candidates(metric)
+    matched_rows = []
+    for _, row in df.iterrows():
+        standard = _clean_text(row.get("standard_concept", ""))
+        label = _clean_text(row.get("label", ""))
+        if standard and any(standard == _clean_text(candidate) for candidate in candidates["standard"]):
+            matched_rows.append(row)
+            continue
+        if label and any(label == _clean_text(candidate) for candidate in candidates["label"]):
+            matched_rows.append(row)
+
+    if not matched_rows:
+        for _, row in df.iterrows():
+            label_cells = " ".join(_clean_text(v) for v in row.values[:4])
+            if any(candidate in label_cells for candidate in candidates["label"]):
+                matched_rows.append(row)
+
+    if not matched_rows:
+        return {}, {}
+
+    values = {}
+    sources = {}
+    for matched_row in matched_rows:
+        for year, col in year_cols.items():
+            if year in values:
+                continue
+            number = _first_numeric(matched_row.get(col))
+            if number is not None:
+                values[year] = str(round(number, 2))
+                sources[year] = {
+                    "period": str(col),
+                    "label": str(matched_row.get("label", "")),
+                }
+        if len(values) == len(year_cols):
+            break
+    return values, sources
+
 def _read_financial_source_dataframe(path):
     import pandas as pd
     ext = path.rsplit(".", 1)[-1].lower() if "." in path else ""
@@ -588,6 +687,221 @@ def _read_financial_source_dataframe(path):
         sheets = pd.read_excel(path, sheet_name=None, header=None)
         return list(sheets.values())
     return []
+
+def _excel_value_label(value):
+    text = str(value or "").strip()
+    if not text or text.lower() == "nan":
+        return ""
+    return text
+
+def _excel_number(value):
+    if value is None:
+        return None
+    if isinstance(value, str):
+        text = value.replace(",", "").strip()
+        if not text or text == "-":
+            return None
+        value = text
+    return _first_numeric(value)
+
+def _format_excel_number(value):
+    number = _excel_number(value)
+    if number is None:
+        return ""
+    return str(round(number, 4))
+
+def _parse_valuation_sheet(workbook):
+    if "Valuation" not in workbook.sheet_names:
+        return {
+            "forecast_assumptions": {},
+            "fcf_forecast": {},
+            "source": "",
+        }
+
+    import pandas as pd
+
+    df = pd.read_excel(workbook, sheet_name="Valuation", header=None)
+    assumptions_map = {
+        "sales": "sales",
+        "sales growth rate": "sales_growth_rate",
+        "ebitda": "ebitda",
+        "ebitda sales": "ebitda_sales",
+        "nwc": "nwc",
+        "nwc revenue": "nwc_revenue",
+        "depreciation": "depreciation",
+        "capex": "capex",
+        "tax rate": "tax_rate",
+    }
+    fcf_map = {
+        "ebit 1 t": "ebit_after_tax",
+        "depreciation": "depreciation",
+        "depreciation change yoy": "depreciation_change",
+        "change in nwc": "change_nwc",
+        "investment": "investment",
+        "fcf": "fcf",
+    }
+
+    assumption_years = []
+    assumption_header_row = None
+    fcf_header_row = None
+    valuation_marker_row = None
+    for row_idx, row in df.iterrows():
+        first = _clean_text(row.iloc[0] if len(row) else "")
+        if first.startswith("forecasts"):
+            assumption_header_row = row_idx
+            for value in row.iloc[1:].tolist():
+                number = _excel_number(value)
+                if number is not None and 1900 <= number <= 2200:
+                    assumption_years.append(str(int(number)))
+            continue
+        if first == "valuation worksheet":
+            valuation_marker_row = row_idx
+            continue
+        if first == "year" and valuation_marker_row is not None and fcf_header_row is None and row_idx > valuation_marker_row:
+            numeric_count = sum(1 for value in row.iloc[1:].tolist() if _excel_number(value) is not None)
+            if numeric_count >= 8:
+                fcf_header_row = row_idx
+
+    forecast_assumptions = {}
+    if assumption_header_row is not None and assumption_years:
+        for row_idx in range(assumption_header_row + 1, min(assumption_header_row + 16, len(df.index))):
+            row = df.iloc[row_idx]
+            key = assumptions_map.get(_clean_text(row.iloc[0] if len(row) else ""))
+            if not key:
+                continue
+            values = {}
+            for col_offset, year in enumerate(assumption_years, start=1):
+                if col_offset >= len(row):
+                    continue
+                value = _format_excel_number(row.iloc[col_offset])
+                if value != "":
+                    values[year] = value
+            if values:
+                forecast_assumptions[key] = values
+
+    fcf_forecast = {}
+    if fcf_header_row is not None and assumption_years:
+        fcf_years = assumption_years[1:] or assumption_years
+        for row_idx in range(fcf_header_row + 1, min(fcf_header_row + 10, len(df.index))):
+            row = df.iloc[row_idx]
+            key = fcf_map.get(_clean_text(row.iloc[0] if len(row) else ""))
+            if not key:
+                continue
+            values = {}
+            numeric_values = [
+                _format_excel_number(value)
+                for value in row.iloc[1:].tolist()
+                if _format_excel_number(value) != ""
+            ]
+            for year, value in zip(fcf_years, numeric_values):
+                values[year] = value
+            if values:
+                fcf_forecast[key] = values
+
+    return {
+        "forecast_assumptions": forecast_assumptions,
+        "fcf_forecast": fcf_forecast,
+        "source": "Valuation",
+    }
+
+def _parse_estimates_workbook(path):
+    import pandas as pd
+
+    ext = path.rsplit(".", 1)[-1].lower() if "." in path else ""
+    engine = "xlrd" if ext == "xls" else None
+    workbook = pd.ExcelFile(path, engine=engine)
+    preferred = [name for name in ["Consensus", "Estimates"] if name in workbook.sheet_names]
+    sheet_names = preferred + [name for name in workbook.sheet_names if name not in preferred]
+    target_labels = {
+        "revenue": "Revenue",
+        "ebitda": "EBITDA",
+        "free cash flow": "Free Cash Flow",
+        "tax rate": "Tax Rate",
+    }
+
+    parsed_rows = []
+    for sheet_name in sheet_names:
+        df = pd.read_excel(workbook, sheet_name=sheet_name, header=None)
+        for row_idx, row in df.iterrows():
+            cells = row.tolist()
+            for col_idx, cell in enumerate(cells):
+                label_key = _clean_text(cell)
+                if label_key not in target_labels:
+                    continue
+
+                values = []
+                for value in cells[col_idx + 1:]:
+                    number = _excel_number(value)
+                    if number is not None:
+                        values.append(str(round(number, 2)))
+                    elif values and len(values) >= 3:
+                        break
+                    if len(values) >= 10:
+                        break
+
+                if values:
+                    parsed_rows.append({
+                        "sheet": sheet_name,
+                        "row": row_idx + 1,
+                        "label": target_labels[label_key],
+                        "values": values,
+                    })
+        if parsed_rows:
+            break
+
+    return {
+        "sheet_names": workbook.sheet_names,
+        "rows": parsed_rows[:12],
+        "valuation": _parse_valuation_sheet(workbook),
+    }
+
+@app.route("/upload-dcf-estimates", methods=["POST"])
+def upload_dcf_estimates():
+    if dcf_current is None:
+        return jsonify({"status": "error", "message": "Complete Step 1 before uploading analyst estimates."}), 400
+
+    if "file" not in request.files:
+        return jsonify({"status": "error", "message": "No analyst estimates file provided."}), 400
+
+    file = request.files["file"]
+    if not file.filename:
+        return jsonify({"status": "error", "message": "No analyst estimates file provided."}), 400
+
+    filename = secure_filename(file.filename)
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if ext not in {"xls", "xlsx", "csv"}:
+        return jsonify({"status": "error", "message": f"Unsupported estimates file: {filename}"}), 400
+
+    ticker = secure_filename(dcf_current.ticker_symbol.upper()) or "target"
+    target_dir = os.path.join(dcf_upload_dir, ticker, "estimates")
+    os.makedirs(target_dir, exist_ok=True)
+    path = os.path.join(target_dir, filename)
+    file.save(path)
+
+    try:
+        summary = _parse_estimates_workbook(path) if ext in {"xls", "xlsx"} else {"sheet_names": [], "rows": []}
+    except Exception as e:
+        summary = {
+            "sheet_names": [],
+            "rows": [],
+            "error": str(e),
+        }
+
+    saved = {
+        "filename": filename,
+        "path": path,
+        "preview_url": f"/preview-dcf-file-html/estimates/{filename}",
+        "open_url": f"/preview-dcf-file/estimates/{filename}",
+    }
+    dcf_current.analyst_estimate_files = [saved]
+    dcf_current.analyst_estimate_summary = summary
+
+    return jsonify({
+        "status": "ok",
+        "message": f"Uploaded analyst estimates file {filename}.",
+        "file": saved,
+        "summary": summary,
+    })
 
 @app.route("/autofill-dcf-dupont-target", methods=["POST"])
 def autofill_dcf_dupont_target():
@@ -646,6 +960,263 @@ def autofill_dcf_dupont_target():
         "ticker": ticker,
         "values": found,
         "sources": sources,
+    })
+
+def _extract_dupont_values_from_edgar_ticker(ticker):
+    from edgar import Company
+    from edgar.xbrl import XBRLS
+
+    ticker = str(ticker or "").strip().upper()
+    if not ticker:
+        return {}, {}
+
+    company = Company(ticker)
+    filings = list(company.get_filings(form="10-K").head(1))
+    if not filings:
+        return {}, {}
+
+    xbrls = XBRLS.from_filings(filings)
+    statements = [
+        ("Income Statement", xbrls.statements.income_statement),
+        ("Balance Sheet", xbrls.statements.balance_sheet),
+    ]
+
+    found = {}
+    sources = {}
+    for statement_name, statement_getter in statements:
+        try:
+            df = statement_getter().to_dataframe()
+        except Exception:
+            continue
+
+        for metric in ["net_income", "sales", "assets", "equity"]:
+            if metric in found:
+                continue
+            extracted = _extract_metric_from_statement_df(df, metric)
+            if extracted:
+                number, period, label = extracted
+                found[metric] = str(round(number, 2))
+                sources[metric] = {
+                    "statement": statement_name,
+                    "period": period,
+                    "label": label,
+                }
+
+    return found, sources
+
+def _extract_dupont_timeseries_from_edgar_ticker(ticker, target_years=None):
+    from edgar import Company
+    from edgar.xbrl import XBRLS
+
+    ticker = str(ticker or "").strip().upper()
+    if not ticker:
+        return {}, {}
+
+    filing_count = len(target_years or []) or 5
+    company = Company(ticker)
+    filings = list(company.get_filings(form="10-K").head(filing_count))
+    if not filings:
+        return {}, {}
+
+    xbrls = XBRLS.from_filings(filings)
+    statements = [
+        ("Income Statement", xbrls.statements.income_statement),
+        ("Balance Sheet", xbrls.statements.balance_sheet),
+    ]
+
+    values_by_year = {str(year): {} for year in target_years or []}
+    sources_by_year = {str(year): {} for year in target_years or []}
+    found_metrics = set()
+
+    for statement_name, statement_getter in statements:
+        try:
+            df = statement_getter().to_dataframe()
+        except Exception:
+            continue
+
+        for metric in ["net_income", "sales", "assets", "equity"]:
+            if metric in found_metrics:
+                continue
+            metric_values, metric_sources = _extract_metric_timeseries_from_statement_df(df, metric, target_years)
+            if not metric_values:
+                continue
+
+            found_metrics.add(metric)
+            for year, value in metric_values.items():
+                values_by_year.setdefault(str(year), {})[metric] = value
+                source = metric_sources.get(year, {})
+                sources_by_year.setdefault(str(year), {})[metric] = {
+                    "statement": statement_name,
+                    **source,
+                }
+
+    values_by_year = {year: values for year, values in values_by_year.items() if values}
+    sources_by_year = {year: sources for year, sources in sources_by_year.items() if sources}
+    return values_by_year, sources_by_year
+
+@app.route("/autofill-dcf-dupont-company", methods=["POST"])
+def autofill_dcf_dupont_company():
+    if dcf_current is None:
+        return jsonify({"status": "error", "message": "Complete Step 1 before auto-sourcing company data."}), 400
+
+    data = request.get_json(silent=True) or {}
+    identity = data.get("edgar_identity") or dcf_current.edgar_identity or os.environ.get("EDGAR_IDENTITY")
+    if identity:
+        dcf_current.edgar_identity = identity
+        os.environ["EDGAR_IDENTITY"] = identity
+
+    company = data.get("company") or {}
+    ticker = str(company.get("ticker_symbol") or "").strip().upper()
+    if not ticker:
+        return jsonify({
+            "status": "manual_required",
+            "message": "Add a ticker symbol before auto-sourcing from EDGAR.",
+            "ticker": "",
+            "values": {},
+            "sources": {},
+        }), 200
+
+    year_values = data.get("years") or []
+    if not year_values and dcf_current.most_recent_fiscal_year:
+        year_values = [dcf_current.most_recent_fiscal_year - offset for offset in range(5)]
+    target_years = [str(year) for year in year_values if str(year).strip()]
+
+    try:
+        import edgar  # noqa: F401
+    except Exception as e:
+        return jsonify({
+            "status": "manual_required",
+            "message": f"EdgarTools is unavailable: {e}. Enter the financials manually.",
+            "ticker": ticker,
+            "values": {},
+            "sources": {},
+        }), 200
+
+    try:
+        values, sources = _extract_dupont_timeseries_from_edgar_ticker(ticker, target_years)
+    except Exception as e:
+        return jsonify({
+            "status": "manual_required",
+            "message": f"Could not auto-source {ticker}: {e}",
+            "ticker": ticker,
+            "values": {},
+            "sources": {},
+        }), 200
+
+    if not values:
+        return jsonify({
+            "status": "manual_required",
+            "message": f"No usable 10-K DuPont inputs were found for {ticker}. Enter them manually.",
+            "ticker": ticker,
+            "values": {},
+            "sources": {},
+        }), 200
+
+    existing = dcf_current.dupont_data.get(ticker, {})
+    if any(metric in existing for metric in ["net_income", "sales", "assets", "equity"]):
+        latest_year = target_years[0] if target_years else next(iter(values.keys()), "")
+        existing = {
+            latest_year: existing,
+            **{year: value for year, value in existing.items() if isinstance(value, dict)},
+        }
+
+    merged = existing if isinstance(existing, dict) else {}
+    for year, metrics in values.items():
+        merged[str(year)] = {
+            **merged.get(str(year), {}),
+            **metrics,
+        }
+    dcf_current.dupont_data[ticker] = merged
+
+    return jsonify({
+        "status": "ok",
+        "message": f"Auto-sourced {ticker} financials from EDGAR.",
+        "ticker": ticker,
+        "values": values,
+        "sources": sources,
+    })
+
+@app.route("/autofill-dcf-dupont-competitors", methods=["POST"])
+def autofill_dcf_dupont_competitors():
+    if dcf_current is None:
+        return jsonify({"status": "error", "message": "Complete Step 1 before autofilling competitor data."}), 400
+
+    data = request.get_json(silent=True) or {}
+    identity = data.get("edgar_identity") or dcf_current.edgar_identity or os.environ.get("EDGAR_IDENTITY")
+    if identity:
+        dcf_current.edgar_identity = identity
+        os.environ["EDGAR_IDENTITY"] = identity
+
+    competitors = [
+        c for c in dcf_current.industry_competitors
+        if c.get("ticker_symbol") or c.get("company_name")
+    ]
+    if not competitors:
+        return jsonify({
+            "status": "manual_required",
+            "message": "Add competitors first, or upload a Quick Comps file, then try auto-sourcing again.",
+            "values_by_ticker": {},
+            "sources_by_ticker": {},
+            "failures": [],
+        }), 200
+
+    try:
+        import edgar  # noqa: F401
+    except Exception as e:
+        return jsonify({
+            "status": "manual_required",
+            "message": f"EdgarTools is unavailable: {e}. Enter competitor financials manually.",
+            "values_by_ticker": {},
+            "sources_by_ticker": {},
+            "failures": [],
+        }), 200
+
+    values_by_ticker = {}
+    sources_by_ticker = {}
+    failures = []
+
+    for competitor in competitors:
+        ticker = str(competitor.get("ticker_symbol") or "").strip().upper()
+        if not ticker:
+            failures.append({
+                "ticker": competitor.get("company_name") or "Unknown competitor",
+                "message": "No ticker symbol provided.",
+            })
+            continue
+
+        try:
+            found, sources = _extract_dupont_values_from_edgar_ticker(ticker)
+        except Exception as e:
+            failures.append({"ticker": ticker, "message": str(e)})
+            continue
+
+        if not found:
+            failures.append({"ticker": ticker, "message": "No usable 10-K DuPont inputs were found."})
+            continue
+
+        dcf_current.dupont_data[ticker] = {
+            **dcf_current.dupont_data.get(ticker, {}),
+            **found,
+        }
+        values_by_ticker[ticker] = found
+        sources_by_ticker[ticker] = sources
+
+    if values_by_ticker and failures:
+        status = "partial"
+        message = f"Autofilled competitor financials for {len(values_by_ticker)} of {len(competitors)} competitor(s)."
+    elif values_by_ticker:
+        status = "ok"
+        message = f"Autofilled competitor financials for {len(values_by_ticker)} competitor(s)."
+    else:
+        status = "manual_required"
+        message = "Could not auto-source competitor financials. Enter them manually for now."
+
+    return jsonify({
+        "status": status,
+        "message": message,
+        "values_by_ticker": values_by_ticker,
+        "sources_by_ticker": sources_by_ticker,
+        "failures": failures,
     })
 
 @app.route("/autosource-dcf-financials", methods=["POST"])
